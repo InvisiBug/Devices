@@ -101,8 +101,6 @@ long lastMQTTReconnectAttempt = 0;
 
 float temperature, humidity, pressure;
 
-int correctionFactor = -2.0;
-
 ////////////////////////////////////////////////////////////////////////
 //
 //  ######                                                #####
