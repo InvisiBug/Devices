@@ -22,12 +22,10 @@
 ////////////////////////////////////////////////////////////////////////
 #include <ArduinoJson.h>     // Json
 #include <ArduinoOTA.h>      // OTA
-#include <NTPClient.h>       // Time
 #include <PubSubClient.h>    // MQTT
 #include <SparkFunBME280.h>  // BME 280 Library
 #include <Streaming.h>       // Serial Printouts
 #include <String.h>
-#include <TimeLib.h>
 #include <WiFiClient.h>  //
 #include <Wire.h>        // SPI Comms
 ////////////////////////////////////////////////////////////////////////
@@ -71,10 +69,6 @@ PubSubClient mqtt(espClient);
 // Sensor
 BME280 sensor;
 
-// Time Client
-WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, NTP_ADDRESS, NTP_OFFSET, NTP_INTERVAL);
-
 ////////////////////////////////////////////////////////////////////////
 //
 //  #     #
@@ -86,19 +80,19 @@ NTPClient timeClient(ntpUDP, NTP_ADDRESS, NTP_OFFSET, NTP_INTERVAL);
 //     #    #    # #    # # #    # #####  ###### ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-char *wifiSsid = "I Don't Mind";
-char *wifiPassword = "Have2Biscuits";
+const char *wifiSsid = "I Don't Mind";
+const char *wifiPassword = "Have2Biscuits";
 
-char *nodeName = "Kitchen Heating Sensor";  // change for different room
-char *nodePassword = "crm0xhvsmn";
+const char *nodeName = "Kitchen Heating Sensor";  // change for different room
+const char *nodePassword = "crm0xhvsmn";
 
-char *disconnectMsg = "Kitchen Heating Sensor Disconnected";
+const char *disconnectMsg = "Kitchen Heating Sensor Disconnected";
 
-char *mqttServerIP = "192.168.1.46";
+const char *mqttServerIP = "192.168.1.46";
 
 bool WiFiConnected = false;
 
-long interval = (5 * 1000);  // Wait time before taking reading
+unsigned long interval = (5 * 1000);  // Wait time before taking reading
 unsigned long previousMillis = 0;
 
 long connectionTimeout = (2 * 1000);
@@ -131,8 +125,6 @@ void setup() {
   startOTA();
 
   startSensors();
-
-  startTime();
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -150,21 +142,12 @@ void loop() {
   handleWiFi();
   handleMQTT();
   ArduinoOTA.handle();
-  timeClient.update();  // This is needed to keep the time updated
 
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
 
     if (WiFiConnected) {
-      // Serial << "| Time " << timeClient.getFormattedTime() << " |" << endl;
-      // long currentTime = timeClient.getEpochTime();
-
-      // Serial << "Voltage: " << checkBattery() << endl;
-
-      // Serial << getTimestamp(currentTime) << endl;
-      // Serial << day(currentTime) << endl;
-
       publishSensors();
       Serial << "Sending Data" << endl;
     }
