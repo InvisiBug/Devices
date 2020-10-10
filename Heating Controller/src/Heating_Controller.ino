@@ -34,22 +34,24 @@
 //  ######  ###### #      # #    # #   #   #  ####  #    #  ####
 //
 ////////////////////////////////////////////////////////////////////////
-// Physical I/O
-#define connectionLED 13
-#define relayPin 12
-#define buttonPin 0
+// // Physical I/O
+// #define connectionLED 13
+// #define relayPin 12
+// #define buttonPin 0
+// // I/O Logic
+#define ON LOW
+#define OFF HIGH
 
 // Test Board I/O
-// #define connectionLED D7
-// #define relayPin D5
-// #define buttonPin D3
+#define connectionLED D7
+#define relayPin D5
+#define buttonPin D3
+// I/O Logic
+// #define ON HIGH
+// #define OFF LOW
 
 // MQTT
 #define qos 0
-
-// I/O Logic
-#define ON LOW
-#define OFF HIGH
 
 #define mqttLen 50  // Buffer for non JSON MQTT comms
 

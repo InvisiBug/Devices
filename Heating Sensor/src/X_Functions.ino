@@ -44,6 +44,11 @@ void handleWiFi() {
     Serial << endl;
     Serial << "| Connected to " << wifiSsid << " |" << endl;
     Serial << "| IP address : " << WiFi.localIP() << " |" << endl;
+
+    // if(sensor.beginI2C() == false) //Begin communication over I2C
+    // {
+    //   Serial.println("The sensor did not respond. Please check wiring.");
+    // }
   }
 }
 
@@ -95,6 +100,46 @@ void startOTA() {
 
 ////////////////////////////////////////////////////////////////////////
 //
+//  #######
+//     #    # #    # ######
+//     #    # ##  ## #
+//     #    # # ## # #####
+//     #    # #    # #
+//     #    # #    # #
+//     #    # #    # ######
+//
+////////////////////////////////////////////////////////////////////////
+//void startTime()
+//{
+//  timeClient.begin();
+//  timeClient.update();
+//  timeClient.setTimeOffset(1); // Make this auto adjust for DST *NB*
+//  Serial << "| Time " << timeClient.getFormattedTime() << " |" << endl;
+//}
+
+// int getTimestamp(long currentTime)
+// {
+//   // '2020-01-29T22:23:02+00:00'
+
+//   // String month = "-" + String(month(currentTime));
+
+//   int val = month(currentTime);
+
+//   if()
+
+//   // if(month.length )
+
+//   // int timestamp = month.length();
+
+//   // String timestamp;
+
+//   // String timestamp = String(year(currentTime)) + "-" + String(month(currentTime)) + "-" + String(day(currentTime)) + "T" + String(hour(currentTime)) + ":" + String(minute(currentTime)) + ":" + String(second(currentTime));
+
+//   return val;
+// }
+
+////////////////////////////////////////////////////////////////////////
+//
 //  #####
 // #     # ###### #    #  ####   ####  #####   ####
 // #       #      ##   # #      #    # #    # #
@@ -105,9 +150,26 @@ void startOTA() {
 //
 ////////////////////////////////////////////////////////////////////////
 void startSensors() {
-  if (sensor.beginI2C() == false) {
+  pinMode(sensorPowerPin, OUTPUT);
+  // pinMode(batterySensePin, OUTPUT);
+
+  digitalWrite(sensorPowerPin, HIGH);
+  // digitalWrite(batterySensePin, HIGH);
+
+  if (sensor.beginI2C() == false)  //Begin communication over I2C
+  {
     Serial.println("The sensor did not respond. Please check wiring.");
   }
+
+  sensor.setTemperatureCorrection(correctionFactor);
+}
+
+void disableSensor() {
+  digitalWrite(sensorPowerPin, LOW);
+}
+
+void enableSensor() {
+  digitalWrite(sensorPowerPin, HIGH);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -121,6 +183,21 @@ void startSensors() {
 //  #####    #    ####    #   ###### #    #    ######  #    #   #   #    #
 //
 ////////////////////////////////////////////////////////////////////////
+float checkBattery() {
+  int raw;
+  float volt;
+
+  raw = analogRead(A0);
+
+  volt = raw / 1023.0;
+  volt = volt * 4.2;
+
+  volt = volt - 0.06;  // Correction factor
+
+  return mapFloat(volt, 2.5, 4.2, 0.0, 100.0);
+  // return volt;
+}
+
 float mapFloat(float val, float inMin, float inMax, float outMin, float outMax) {
   return (val - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }
