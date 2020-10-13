@@ -48,13 +48,21 @@
 // #define ambientPin D5
 // #define sunPin D6
 
-#define lampPin D6
-#define deskLEDsPin D1
-#define speakersPin D2
-#define floodlightPin D5
-#define screenLEDsPin D7
-#define ambientPin D4
-#define sunPin D3
+// #define deskLEDsPin D1
+// #define screenLEDsPin D7
+// #define lampPin D6
+// #define floodlightPin D5
+// #define ambientPin D4
+// #define sunPin D3
+// #define speakersPin D2
+
+#define button1Pin D1
+#define button2Pin D7
+#define button3Pin D6
+#define button4Pin D5
+#define button5Pin D4
+#define button6Pin D3
+#define button7Pin D2
 
 #define ON LOW  // Confirmed for Wemos D1 Mini (On - High for esp 32)
 #define OFF HIGH
@@ -78,13 +86,21 @@
 WiFiClient espClient;
 PubSubClient mqtt(espClient);
 
-OneButton lamp(lampPin, true);
-OneButton deskLEDs(deskLEDsPin, true);
-OneButton speakers(speakersPin, true);
-OneButton floodlight(floodlightPin, true);
-OneButton screenLEDs(screenLEDsPin, true);
-OneButton ambient(ambientPin, true);
-OneButton sun(sunPin, true);
+// OneButton lamp(lampPin, true);
+// OneButton deskLEDs(deskLEDsPin, true);
+// OneButton speakers(speakersPin, true);
+// OneButton floodlight(floodlightPin, true);
+// OneButton screenLEDs(screenLEDsPin, true);
+// OneButton ambient(ambientPin, true);
+// OneButton sun(sunPin, true);
+
+OneButton button1(button1Pin, true);
+OneButton button2(button2Pin, true);
+OneButton button3(button3Pin, true);
+OneButton button4(button4Pin, true);
+OneButton button5(button5Pin, true);
+OneButton button6(button6Pin, true);
+OneButton button7(button7Pin, true);
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -157,28 +173,40 @@ void setup() {
   startMQTT();
   startOTA();
 
-  lamp.attachClick(lampClicked);
-  lamp.setDebounceTicks(50);
+  button1.attachClick(button1Clicked);
+  button1.setDebounceTicks(50);
+  button1.attachLongPressStart(button1Held);
+  button1.setPressTicks(250);
 
-  deskLEDs.attachClick(deskLEDsClicked);
-  deskLEDs.setDebounceTicks(50);
+  button2.attachClick(button2Clicked);
+  button2.setDebounceTicks(50);
+  button2.attachLongPressStart(button2Held);
+  button2.setPressTicks(250);
 
-  speakers.attachClick(speakersClicked);
-  speakers.setDebounceTicks(50);
-  speakers.attachLongPressStart(speakersHeld);
-  speakers.setPressTicks(250);
+  button3.attachClick(button3Clicked);
+  button3.setDebounceTicks(50);
+  button3.attachLongPressStart(button3Held);
+  button3.setPressTicks(250);
 
-  floodlight.attachClick(floodlightClicked);
-  floodlight.setDebounceTicks(50);
+  button4.attachClick(button4Clicked);
+  button4.setDebounceTicks(50);
+  button3.attachLongPressStart(button4Held);
+  button4.setPressTicks(250);
 
-  screenLEDs.attachClick(screenLEDsClicked);
-  screenLEDs.setDebounceTicks(50);
+  button5.attachClick(button5Clicked);
+  button5.setDebounceTicks(50);
+  button5.attachLongPressStart(button5Held);
+  button5.setPressTicks(250);
 
-  ambient.attachClick(ambientClicked);
-  ambient.setDebounceTicks(50);
+  button6.attachClick(button6Clicked);
+  button6.setDebounceTicks(50);
+  button6.attachLongPressStart(button6Held);
+  button6.setPressTicks(250);
 
-  sun.attachClick(sunClicked);
-  sun.setDebounceTicks(50);
+  button7.attachClick(button7Clicked);
+  button7.setDebounceTicks(50);
+  button7.attachLongPressStart(button7Held);
+  button7.setPressTicks(250);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -197,11 +225,11 @@ void loop() {
   handleMQTT();
   ArduinoOTA.handle();
 
-  lamp.tick();
-  deskLEDs.tick();
-  speakers.tick();
-  floodlight.tick();
-  screenLEDs.tick();
-  ambient.tick();
-  sun.tick();
+  button1.tick();
+  button2.tick();
+  button3.tick();
+  button4.tick();
+  button5.tick();
+  button6.tick();
+  button7.tick();
 }
