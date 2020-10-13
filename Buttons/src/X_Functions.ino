@@ -1,11 +1,4 @@
 ////////////////////////////////////////////////////////////////////////
-//  Matthew Kavanagh
-//
-//  Kavanet
-//  Functions.ino
-//  2019
-//  *********
-////////////////////////////////////////////////////////////////////////
 //
 //  #     #   #######
 //  #  #  # # #       #
@@ -17,6 +10,7 @@
 //
 ////////////////////////////////////////////////////////////////////////
 void startWifi() {
+  pinMode(connectionLED, OUTPUT);
   WiFi.mode(WIFI_OFF);                 // Clears the last wifi credentials
   WiFi.mode(WIFI_STA);                 // Wifi Modes (WIFI_OFF, WIFI_STA, WIFI_AP, WIFI_AP_STA)
   WiFi.begin(wifiSsid, wifiPassword);  // Dont put give the ESP a host name, it screws up the wifi causing disconnects
@@ -88,20 +82,4 @@ void startOTA() {
   });
 
   ArduinoOTA.begin();
-}
-
-void publishSensors() {
-  float temp = dht.getTemperature();
-  float humid = dht.getHumidity();
-
-  const size_t capacity = JSON_OBJECT_SIZE(3);
-  DynamicJsonDocument doc(capacity);
-
-  doc["node"] = "Our Room Heating Sensor";
-  doc["temperature"] = temp;
-  doc["humidity"] = humid;
-
-  char buffer[512];
-  size_t n = serializeJson(doc, buffer);
-  mqtt.publish("Our Room Heating Sensor", buffer, n);
 }

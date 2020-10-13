@@ -77,6 +77,20 @@ void messageReceived(char* topic, byte* payload, unsigned int length) {
     // Serial << "Plug: " << !plugOff << endl;
   }
 
+  if (!strcmp(topic, "Sun")) {
+    StaticJsonDocument<256> doc;
+    deserializeJson(doc, payload, length);
+    // Serial << doc["state"] << endl;
+
+    if (doc["state"] == false) {
+      sunOff = true;
+    } else {
+      sunOff = false;
+    }
+
+    // Serial << "Sun: " << !sunOff << endl;
+  }
+
   if (!strcmp(topic, "Computer Audio")) {
     StaticJsonDocument<256> doc;
     deserializeJson(doc, payload, length);
@@ -132,7 +146,8 @@ void messageReceived(char* topic, byte* payload, unsigned int length) {
       screenLEDsRed = doc["red"];
       screenLEDsGreen = doc["green"];
       screenLEDsBlue = doc["blue"];
-      Serial << topic << "\t Red: " << screenLEDsRed << "\t Green: " << screenLEDsGreen << "\t Blue: " << screenLEDsBlue << endl;
+
+      // Serial << topic << "\t Red: " << screenLEDsRed << "\t Green: " << screenLEDsGreen << "\t Blue: " << screenLEDsBlue << endl;
     } else if (doc["mode"] == 0) {
       screenLEDsOff = true;
       ambientMode = false;
@@ -170,4 +185,5 @@ void subscribeToTopics() {
   mqtt.subscribe("Plug");
   mqtt.subscribe("Computer Audio");
   mqtt.subscribe("Computer Power");
+  mqtt.subscribe("Sun");
 }
