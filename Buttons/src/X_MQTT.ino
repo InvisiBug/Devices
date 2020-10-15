@@ -179,11 +179,11 @@ void printMessage(byte* payload, int length) {
 //
 ////////////////////////////////////////////////////////////////////////
 void subscribeToTopics() {
-  mqtt.subscribe("Table Lamp");
-  mqtt.subscribe("Desk LEDs");
-  mqtt.subscribe("Screen LEDs");
-  mqtt.subscribe("Plug");
   mqtt.subscribe("Computer Audio");
   mqtt.subscribe("Computer Power");
+  mqtt.subscribe("Screen LEDs");
+  mqtt.subscribe("Table Lamp");
+  mqtt.subscribe("Desk LEDs");
+  mqtt.subscribe("Plug");
   mqtt.subscribe("Sun");
 }

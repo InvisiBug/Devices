@@ -40,29 +40,13 @@
 ////////////////////////////////////////////////////////////////////////
 #define connectionLED LED_BUILTIN
 
-// #define lampPin D7
-// #define deskLEDsPin D1
-// #define speakersPin D2
-// #define floodlightPin D3
-// #define screenLEDsPin D4
-// #define ambientPin D5
-// #define sunPin D6
-
-// #define deskLEDsPin D1
-// #define screenLEDsPin D7
-// #define lampPin D6
-// #define floodlightPin D5
-// #define ambientPin D4
-// #define sunPin D3
-// #define speakersPin D2
-
 #define button1Pin D1
-#define button2Pin D7
-#define button3Pin D6
-#define button4Pin D5
-#define button5Pin D4
-#define button6Pin D3
-#define button7Pin D2
+#define button2Pin D2
+#define button3Pin D3
+#define button4Pin D4
+#define button5Pin D5
+#define button6Pin D6
+#define button7Pin D7
 
 #define ON LOW  // Confirmed for Wemos D1 Mini (On - High for esp 32)
 #define OFF HIGH
@@ -85,14 +69,6 @@
 // MQTT Client
 WiFiClient espClient;
 PubSubClient mqtt(espClient);
-
-// OneButton lamp(lampPin, true);
-// OneButton deskLEDs(deskLEDsPin, true);
-// OneButton speakers(speakersPin, true);
-// OneButton floodlight(floodlightPin, true);
-// OneButton screenLEDs(screenLEDsPin, true);
-// OneButton ambient(ambientPin, true);
-// OneButton sun(sunPin, true);
 
 OneButton button1(button1Pin, true);
 OneButton button2(button2Pin, true);
