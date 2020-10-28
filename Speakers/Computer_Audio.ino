@@ -220,7 +220,7 @@ void loop()
   if(buttonThreeState != lastButtonThreeState)
   {
     if(buttonThreeState) 
-    { 
+    {  
       buttonThreePressed();
     }
   }
