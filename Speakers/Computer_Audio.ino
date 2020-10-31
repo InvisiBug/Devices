@@ -128,9 +128,6 @@ long connectionTimeout = (2 * 1000);
 long lastWiFiReconnectAttempt = 0;
 long lastMQTTReconnectAttempt = 0;
 
-
-// int Left_Speaker;
-
 ////////////////////////////////////////////////////////////////////////
 //
 //  ######                                                #####                                          

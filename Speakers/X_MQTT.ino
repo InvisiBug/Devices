@@ -81,7 +81,7 @@ void messageReceived(char* topic, byte* payload, unsigned int length)
     digitalWrite(leftSpeaker, Left_Speaker);
     digitalWrite(rightSpeaker, Right_Speaker);
     digitalWrite(sub, Sub);
-    digitalWrite(mixer, Mixer);     
+    digitalWrite(mixer, Mixer);
   }
   
   publishAll();  
