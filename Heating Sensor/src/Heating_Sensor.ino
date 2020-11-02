@@ -87,15 +87,15 @@ BME280 sensor;
 //     #    #    # #    # # #    # #####  ###### ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-char *wifiSsid = "I Don't Mind";
-char *wifiPassword = "Have2Biscuits";
+const char *wifiSsid = "I Don't Mind";
+const char *wifiPassword = "Have2Biscuits";
 
-char *nodeName = "Kitchen Heating Sensor";  // change for different room
-char *nodePassword = "crm0xhvsmn";
+const char *nodeName = "Our Room Heating Sensor";  // change for different room
+const char *nodePassword = "crm0xhvsmn";
 
-char *disconnectMsg = "Kitchen Heating Sensor Disconnected";
+const char *disconnectMsg = "Our Room Heating Sensor Disconnected";
 
-char *mqttServerIP = "192.168.1.46";
+const char *mqttServerIP = "192.168.1.46";
 
 bool WiFiConnected = false;
 
