@@ -89,7 +89,7 @@ void messageReceived(char* topic, byte* payload, unsigned int length)
 
 void printMessage(byte* payload, int length)
 {
-  for(int i = 0; i < length; i++)
+  for(int i = 0; i < length; i++) 
   {
     Serial << (char) payload[i]; // No endl here
   }
