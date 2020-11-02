@@ -2,8 +2,12 @@
 //  Matthew Kavanagh
 //
 //  Kavanet
-//  Heating Controller
-//  28/12/2019
+//  Heating Sensor.ino
+//  2020
+//
+//  Pins
+//  D1 - SCL
+//  D2 - SDA
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -16,13 +20,17 @@
 //  ### #    #  ####  ######  ####  #####  ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-#include <ArduinoJson.h>  // Json Library
-#include <ArduinoOTA.h>   // OTA
-#include <OneButton.h>
-#include <PubSubClient.h>  // MQTT
-#include <Streaming.h>     // Serial printouts
-#include <WiFiClient.h>    // Wifi
+#include <ArduinoJson.h>     // Json
+#include <ArduinoOTA.h>      // OTA
+#include <NTPClient.h>       // Time
+#include <PubSubClient.h>    // MQTT
+#include <SparkFunBME280.h>  // BME 280 Library
+#include <Streaming.h>       // Serial Printouts
+#include <WiFiClient.h>      //
+#include <Wire.h>            // SPI Comms
+//#include <TimeLib.h>
 
+#include <String.h>
 ////////////////////////////////////////////////////////////////////////
 //
 //  ######
@@ -34,26 +42,17 @@
 //  ######  ###### #      # #    # #   #   #  ####  #    #  ####
 //
 ////////////////////////////////////////////////////////////////////////
-// // Physical I/O
-// #define connectionLED 13
-// #define relayPin 12
-// #define buttonPin 0
-// // I/O Logic
-#define ON LOW
+#define connectionLED LED_BUILTIN
+
+#define sensorPowerPin D6
+
+#define ON LOW  // Confirmed for Wemos D1 Mini (On - High for esp 32)
 #define OFF HIGH
 
-// Test Board I/O
-#define connectionLED D7
-#define relayPin D5
-#define buttonPin D3
-// I/O Logic
-// #define ON HIGH
-// #define OFF LOW
-
-// MQTT
-#define qos 0
-
-#define mqttLen 50  // Buffer for non JSON MQTT comms
+// Time
+//#define NTP_ADDRESS "1.uk.pool.ntp.org" // Uk time server
+//#define NTP_OFFSET 60 * 60              // In seconds
+//#define NTP_INTERVAL 60 * 1000          // In miliseconds
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -66,12 +65,16 @@
 //  #     # #    # #    # #####  #    # #    # #    # ######
 //
 ////////////////////////////////////////////////////////////////////////
-// MQTT CLient
+// MQTT Client
 WiFiClient espClient;
 PubSubClient mqtt(espClient);
 
-// Button
-OneButton button(buttonPin, true);
+// Sensor
+BME280 sensor;
+
+// Time Client
+//WiFiUDP ntpUDP;
+//NTPClient timeClient(ntpUDP, NTP_ADDRESS, NTP_OFFSET, NTP_INTERVAL);
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -84,35 +87,28 @@ OneButton button(buttonPin, true);
 //     #    #    # #    # # #    # #####  ###### ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-const char* wifiSsid = "I Don't Mind";
-const char* wifiPassword = "Have2Biscuits";
+char *wifiSsid = "I Don't Mind";
+char *wifiPassword = "Have2Biscuits";
 
-const char* nodeName = "Heating";
-const char* nodePassword = "crm0xhvsmn";
+char *nodeName = "Kitchen Heating Sensor";  // change for different room
+char *nodePassword = "crm0xhvsmn";
 
-const char* disconnectMsg = "Heating Disconnected";
-const char* controlTopic = "Heating Control";
-const char* mqttServerIP = "192.168.1.46";
+char *disconnectMsg = "Kitchen Heating Sensor Disconnected";
+
+char *mqttServerIP = "192.168.1.46";
 
 bool WiFiConnected = false;
 
-char msg[mqttLen];  // Buffer to store the MQTT messages
+long interval = (5 * 1000);  // Wait time before taking reading
+unsigned long previousMillis = 0;
 
-// Connection Timers
 long connectionTimeout = (2 * 1000);
 long lastWiFiReconnectAttempt = 0;
 long lastMQTTReconnectAttempt = 0;
 
-// Status Update
-unsigned long updateCurrentMillis;
-unsigned long updatePreviousMillis;
+float temperature, humidity, pressure;
 
-// unsigned long timerCurrentMillis  = 0;
-unsigned long timerPreviousMillis = 0;
-
-bool relayState = false;
-bool buttonState = false;
-bool lastButtonState = false;
+int correctionFactor = -2.0;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -127,21 +123,17 @@ bool lastButtonState = false;
 ////////////////////////////////////////////////////////////////////////
 void setup() {
   Serial.begin(115200);
-  Serial << "\n|** " << nodeName << " **|" << endl;
+  Serial << "\n| " << nodeName << " |" << endl;
 
   pinMode(connectionLED, OUTPUT);
-
-  pinMode(relayPin, OUTPUT);
-  pinMode(buttonPin, INPUT);
-
-  digitalWrite(relayPin, false);
 
   startWifi();
   startMQTT();
   startOTA();
 
-  button.attachClick(click);
-  button.setDebounceTicks(50);
+  startSensors();
+
+  //  startTime();
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -155,20 +147,27 @@ void setup() {
 //  #     # #    # # #    #    #       #    #  ####   ####  #    # #    # #    #
 //
 ///////////////////////////////////////////////////////////////////////
-void loop() {
+void loop(void) {
   handleWiFi();
   handleMQTT();
   ArduinoOTA.handle();
-  button.tick();
+  //  timeClient.update(); // This is needed to keep the time updated
 
-  updateCurrentMillis = millis();
-  if (updateCurrentMillis - updatePreviousMillis >= 5 * 1000) {
-    updatePreviousMillis = updateCurrentMillis;
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
 
-    publishAll();
+    if (WiFiConnected) {
+      // Serial << "| Time " << timeClient.getFormattedTime() << " |" << endl;
+      // long currentTime = timeClient.getEpochTime();
+
+      // Serial << "Voltage: " << checkBattery() << endl;
+
+      // Serial << getTimestamp(currentTime) << endl;
+      // Serial << day(currentTime) << endl;
+
+      publishSensors();
+      Serial << "Sending Data" << endl;
+    }
   }
-}
-
-void click() {
-  mqtt.publish("Heating Button", "1");
 }
