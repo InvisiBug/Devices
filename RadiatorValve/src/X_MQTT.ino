@@ -40,14 +40,12 @@ void handleMQTT() {
 
 void messageReceived(char* topic, byte* payload, unsigned int length) {
   // Serial << "Message Received" << endl;
-  // printMessage(payload, length);
+  printMessage(payload, length);
 
-  if (!strcmp(topic, "Heating Control")) {
-    if ((char)payload[0] == '1') {
-      relayOn();
-    } else if ((char)payload[0] == '0') {
-      relayOff();
-    }
+  if ((char)payload[0] == '1') {
+    relayOn();
+  } else if ((char)payload[0] == '0') {
+    relayOff();
   }
 }
 
