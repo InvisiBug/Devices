@@ -151,13 +151,9 @@ void startOTA() {
 ////////////////////////////////////////////////////////////////////////
 void startSensors() {
   pinMode(sensorPowerPin, OUTPUT);
-  // pinMode(batterySensePin, OUTPUT);
-
   digitalWrite(sensorPowerPin, HIGH);
-  // digitalWrite(batterySensePin, HIGH);
 
-  if (sensor.beginI2C() == false)  //Begin communication over I2C
-  {
+  if (sensor.beginI2C() == false) {   //Begin communication over I2C
     Serial.println("The sensor did not respond. Please check wiring.");
   }
 
@@ -183,32 +179,11 @@ void enableSensor() {
 //  #####    #    ####    #   ###### #    #    ######  #    #   #   #    #
 //
 ////////////////////////////////////////////////////////////////////////
-float checkBattery() {
-  int raw;
-  float volt;
-
-  raw = analogRead(A0);
-
-  volt = raw / 1023.0;
-  volt = volt * 4.2;
-
-  volt = volt - 0.06;  // Correction factor
-
-  return mapFloat(volt, 2.5, 4.2, 0.0, 100.0);
-  // return volt;
-}
-
 float mapFloat(float val, float inMin, float inMax, float outMin, float outMax) {
   return (val - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }
 
 float getTemperature() {
   float temperature = ((float)((int)(sensor.readTempC() * 10))) / 10;
-
-  // if(temperature > 50)
-  // {
-  //   temperature = null;
-  // }
-
   return temperature;
 }
