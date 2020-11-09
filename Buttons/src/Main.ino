@@ -20,7 +20,6 @@
 ////////////////////////////////////////////////////////////////////////
 #include <ArduinoJson.h>  // Json Library
 #include <ArduinoOTA.h>   // OTA
-#include <DHTesp.h>
 #include <ESP8266WiFi.h>  // WiFi
 #include <OneButton.h>
 #include <PubSubClient.h>  // MQTT
