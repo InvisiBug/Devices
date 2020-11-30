@@ -1,0 +1,18 @@
+# Fairy Lights
+
+## Key Codes
+Key | Code
+- | -
+On | 40BF00FF
+Timer | 9C455CBF
+Off | 23B2919F
+1 | 40BF20DF
+2 | 11237BDB
+3 | 40BF10EF
+4 | 3C1B0E83
+5 | 40BF30CF
+6 | 5655FCFF
+7 | 40BF08F7
+8 | 40BF48B7
+Dim - | 40BF28D7
+Dim + | 40BF6897

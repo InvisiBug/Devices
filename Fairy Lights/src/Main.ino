@@ -1,210 +1,76 @@
-////////////////////////////////////////////////////////////////////////
-//  Matthew Kavanagh
-//
-//  Kavanet
-//  Temp Buttons.ino
-//  2019
-//  *********
-//  29/01/2019  Forked from old system and cleaned up
-//  05/02/2019  Added indicator light
-////////////////////////////////////////////////////////////////////////
-//
-//  ###
-//   #  #    #  ####  #      #    # #####  ######  ####
-//   #  ##   # #    # #      #    # #    # #      #
-//   #  # #  # #      #      #    # #    # #####   ####
-//   #  #  # # #      #      #    # #    # #           #
-//   #  #   ## #    # #      #    # #    # #      #    #
-//  ### #    #  ####  ######  ####  #####  ######  ####
-//
-////////////////////////////////////////////////////////////////////////
-#include <ArduinoJson.h>  // Json Library
-#include <ArduinoOTA.h>   // OTA
-#include <ESP8266WiFi.h>  // WiFi
-#include <OneButton.h>
-#include <PubSubClient.h>  // MQTT
-#include <Streaming.h>     // Serial Printouts
-#include <WiFiClient.h>    // May not be needed
+/* IRremoteESP8266: IRsendDemo - demonstrates sending IR codes with IRsend.
+ *
+ * Version 1.1 January, 2019
+ * Based on Ken Shirriff's IrsendDemo Version 0.1 July, 2009,
+ * Copyright 2009 Ken Shirriff, http://arcfn.com
+ *
+ * An IR LED circuit *MUST* be connected to the ESP8266 on a pin
+ * as specified by kIrLed below.
+ *
+ * TL;DR: The IR LED needs to be driven by a transistor for a good result.
+ *
+ * Suggested circuit:
+ *     https://github.com/crankyoldgit/IRremoteESP8266/wiki#ir-sending
+ *
+ * Common mistakes & tips:
+ *   * Don't just connect the IR LED directly to the pin, it won't
+ *     have enough current to drive the IR LED effectively.
+ *   * Make sure you have the IR LED polarity correct.
+ *     See: https://learn.sparkfun.com/tutorials/polarity/diode-and-led-polarity
+ *   * Typical digital camera/phones can be used to see if the IR LED is flashed.
+ *     Replace the IR LED with a normal LED if you don't have a digital camera
+ *     when debugging.
+ *   * Avoid using the following pins unless you really know what you are doing:
+ *     * Pin 0/D3: Can interfere with the boot/program mode & support circuits.
+ *     * Pin 1/TX/TXD0: Any serial transmissions from the ESP8266 will interfere.
+ *     * Pin 3/RX/RXD0: Any serial transmissions to the ESP8266 will interfere.
+ *   * ESP-01 modules are tricky. We suggest you use a module with more GPIOs
+ *     for your first time. e.g. ESP-12 etc.
+ */
 
-////////////////////////////////////////////////////////////////////////
-//
-//  ######
-//  #     # ###### ###### # #    # # ##### #  ####  #    #  ####
-//  #     # #      #      # ##   # #   #   # #    # ##   # #
-//  #     # #####  #####  # # #  # #   #   # #    # # #  #  ####
-//  #     # #      #      # #  # # #   #   # #    # #  # #      #
-//  #     # #      #      # #   ## #   #   # #    # #   ## #    #
-//  ######  ###### #      # #    # #   #   #  ####  #    #  ####
-//
-////////////////////////////////////////////////////////////////////////
-#define connectionLED LED_BUILTIN
+#include <Arduino.h>
+#include <IRremoteESP8266.h>
+#include <IRsend.h>
 
-#define button1Pin D1
-#define button2Pin D2
-#define button3Pin D3
-#define button4Pin D4
-#define button5Pin D5
-#define button6Pin D6
-#define button7Pin D7
+const uint16_t kIrLed = 4;  // ESP8266 GPIO pin to use. Recommended: 4 (D2).
 
-#define ON LOW  // Confirmed for Wemos D1 Mini (On - High for esp 32)
-#define OFF HIGH
+IRsend irsend(kIrLed);  // Set the GPIO to be used to sending the message.
 
-#define mqttLen 50  // Buffer for non JSON MQTT comms
+// Example of data captured by IRrecvDumpV2.ino
+uint16_t rawData[67] = {9000, 4500, 650, 550, 650, 1650, 600, 550, 650, 550,
+                        600, 1650, 650, 550, 600, 1650, 650, 1650, 650, 1650,
+                        600, 550, 650, 1650, 650, 1650, 650, 550, 600, 1650,
+                        650, 1650, 650, 550, 650, 550, 650, 1650, 650, 550,
+                        650, 550, 650, 550, 600, 550, 650, 550, 650, 550,
+                        650, 1650, 600, 550, 650, 1650, 650, 1650, 650, 1650,
+                        650, 1650, 650, 1650, 650, 1650, 600};
+// Example Samsung A/C state captured from IRrecvDumpV2.ino
+uint8_t samsungState[kSamsungAcStateLength] = {
+    0x02, 0x92, 0x0F, 0x00, 0x00, 0x00, 0xF0,
+    0x01, 0xE2, 0xFE, 0x71, 0x40, 0x11, 0xF0};
 
-#define mqttPrint true
-
-////////////////////////////////////////////////////////////////////////
-//
-//  #     #
-//  #     #   ##   #####  #####  #    #   ##   #####  ######
-//  #     #  #  #  #    # #    # #    #  #  #  #    # #
-//  ####### #    # #    # #    # #    # #    # #    # #####
-//  #     # ###### #####  #    # # ## # ###### #####  #
-//  #     # #    # #   #  #    # ##  ## #    # #   #  #
-//  #     # #    # #    # #####  #    # #    # #    # ######
-//
-////////////////////////////////////////////////////////////////////////
-// MQTT Client
-WiFiClient espClient;
-PubSubClient mqtt(espClient);
-
-OneButton button1(button1Pin, true);
-OneButton button2(button2Pin, true);
-OneButton button3(button3Pin, true);
-OneButton button4(button4Pin, true);
-OneButton button5(button5Pin, true);
-OneButton button6(button6Pin, true);
-OneButton button7(button7Pin, true);
-
-////////////////////////////////////////////////////////////////////////
-//
-//  #     #
-//  #     #   ##   #####  #   ##   #####  #      ######  ####
-//  #     #  #  #  #    # #  #  #  #    # #      #      #
-//  #     # #    # #    # # #    # #####  #      #####   ####
-//   #   #  ###### #####  # ###### #    # #      #           #
-//    # #   #    # #   #  # #    # #    # #      #      #    #
-//     #    #    # #    # # #    # #####  ###### ######  ####
-//
-////////////////////////////////////////////////////////////////////////
-const char* wifiSsid = "I Don't Mind";
-const char* wifiPassword = "Have2Biscuits";
-
-const char* nodePassword = "crm0xhvsmn";
-const char* nodeName = "Buttons 2";
-
-const char* disconnectMsg = "Buttons Disconnected";
-
-const char* mqttServerIP = "192.168.1.46";
-
-bool WiFiConnected = false;
-
-char msg[mqttLen];  // Buffer to store the MQTT messages
-
-// System Status Variables
-bool deskOff = false;
-bool lampOff = false;
-bool audioOff = false;
-bool plugOff = false;
-bool computerOff = false;
-bool screenLEDsOff = false;
-bool sunOff = false;
-
-int deskLEDsRed;
-int deskLEDsGreen;
-int deskLEDsBlue;
-
-int tableLampRed;
-int tableLampGreen;
-int tableLampBlue;
-
-int screenLEDsRed;
-int screenLEDsGreen;
-int screenLEDsBlue;
-
-bool ambientMode = false;
-
-long connectionTimeout = (2 * 1000);
-long lastWiFiReconnectAttempt = 0;
-long lastMQTTReconnectAttempt = 0;
-
-////////////////////////////////////////////////////////////////////////
-//
-//  ######                                                #####
-//  #     # #####   ####   ####  #####    ##   #    #    #     # #####   ##   #####  ##### #    # #####
-//  #     # #    # #    # #    # #    #  #  #  ##  ##    #         #    #  #  #    #   #   #    # #    #
-//  ######  #    # #    # #      #    # #    # # ## #     #####    #   #    # #    #   #   #    # #    #
-//  #       #####  #    # #  ### #####  ###### #    #          #   #   ###### #####    #   #    # #####
-//  #       #   #  #    # #    # #   #  #    # #    #    #     #   #   #    # #   #    #   #    # #
-//  #       #    #  ####   ####  #    # #    # #    #     #####    #   #    # #    #   #    ####  #
-//
-////////////////////////////////////////////////////////////////////////
+uint16_t data = 0x23B2919F;
 void setup() {
-  Serial.begin(115200);
-  Serial << "\n|** " << nodeName << " **|" << endl;
-
-  startWifi();
-  startMQTT();
-  startOTA();
-
-  button1.attachClick(button1Clicked);
-  button1.setDebounceTicks(50);
-  button1.attachLongPressStart(button1Held);
-  button1.setPressTicks(250);
-
-  button2.attachClick(button2Clicked);
-  button2.setDebounceTicks(50);
-  button2.attachLongPressStart(button2Held);
-  button2.setPressTicks(250);
-
-  button3.attachClick(button3Clicked);
-  button3.setDebounceTicks(50);
-  button3.attachLongPressStart(button3Held);
-  button3.setPressTicks(250);
-
-  button4.attachClick(button4Clicked);
-  button4.setDebounceTicks(50);
-  button3.attachLongPressStart(button4Held);
-  button4.setPressTicks(250);
-
-  button5.attachClick(button5Clicked);
-  button5.setDebounceTicks(50);
-  button5.attachLongPressStart(button5Held);
-  button5.setPressTicks(250);
-
-  button6.attachClick(button6Clicked);
-  button6.setDebounceTicks(50);
-  button6.attachLongPressStart(button6Held);
-  button6.setPressTicks(250);
-
-  button7.attachClick(button7Clicked);
-  button7.setDebounceTicks(50);
-  button7.attachLongPressStart(button7Held);
-  button7.setPressTicks(250);
+  irsend.begin();
+#if ESP8266
+  Serial.begin(115200, SERIAL_8N1, SERIAL_TX_ONLY);
+#else   // ESP8266
+  Serial.begin(115200, SERIAL_8N1);
+#endif  // ESP8266
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-//  #     #                    ######
-//  ##   ##   ##   # #    #    #     # #####   ####   ####  #####    ##   #    #
-//  # # # #  #  #  # ##   #    #     # #    # #    # #    # #    #  #  #  ##  ##
-//  #  #  # #    # # # #  #    ######  #    # #    # #      #    # #    # # ## #
-//  #     # ###### # #  # #    #       #####  #    # #  ### #####  ###### #    #
-//  #     # #    # # #   ##    #       #   #  #    # #    # #   #  #    # #    #
-//  #     # #    # # #    #    #       #    #  ####   ####  #    # #    # #    #
-//
-///////////////////////////////////////////////////////////////////////
 void loop() {
-  handleWiFi();
-  handleMQTT();
-  ArduinoOTA.handle();
-
-  button1.tick();
-  button2.tick();
-  button3.tick();
-  button4.tick();
-  button5.tick();
-  button6.tick();
-  button7.tick();
+  // Serial.println("NEC");
+  // irsend.sendNEC(0x00FFE01FUL);
+  // delay(2000);
+  // Serial.println("Sony");
+  // irsend.sendSony(0xa90, 12, 2);  // 12 bits & 2 repeats
+  // delay(2000);
+  Serial.println("a rawData capture from IRrecvDumpV2");
+  // irsend.sendRaw(data, 1, 38);  // Send a raw data capture at 38kHz.
+  irsend.sendNEC(0x23B2919F);
+  delay(2000);
+  // Serial.println("a Samsung A/C state from IRrecvDumpV2");
+  // irsend.sendSamsungAC(samsungState);
+  // delay(2000);
 }
