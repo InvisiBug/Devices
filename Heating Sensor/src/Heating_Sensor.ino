@@ -26,9 +26,9 @@
 #include <PubSubClient.h>    // MQTT
 #include <SparkFunBME280.h>  // BME 280 Library
 #include <Streaming.h>       // Serial Printouts
-#include <WiFiClient.h>      //
-#include <Wire.h>            // SPI Comms
 #include <String.h>
+#include <WiFiClient.h>  //
+#include <Wire.h>        // SPI Comms
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -100,6 +100,7 @@ float temperature, humidity, pressure;
 
 int correctionFactor = -2.0;
 
+// boopest?
 ////////////////////////////////////////////////////////////////////////
 //
 //  ######                                                #####

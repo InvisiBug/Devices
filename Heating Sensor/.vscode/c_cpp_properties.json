@@ -1,11 +1,12 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
 {
     "configurations": [
         {
-            "name": "!!! WARNING !!! AUTO-GENERATED FILE, PLEASE DO NOT MODIFY IT AND USE https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags"
-        },
-        {
-            "name": "Mac",
-            "macFrameworkPath": [],
+            "name": "PlatformIO",
             "includePath": [
                 "/Users/Matthew.Kavanagh/My Stuff/Projects/Kavanet/Devices/Heating Sensor/include",
                 "/Users/Matthew.Kavanagh/My Stuff/Projects/Kavanet/Devices/Heating Sensor/src",
@@ -24,9 +25,17 @@
                 "/Users/Matthew.Kavanagh/.platformio/packages/framework-arduinoespressif8266/cores/esp8266",
                 "/Users/Matthew.Kavanagh/.platformio/packages/framework-arduinoespressif8266/tools/sdk/lwip2/include",
                 "/Users/Matthew.Kavanagh/.platformio/packages/framework-arduinoespressif8266/variants/d1_mini",
+                "/Users/Matthew.Kavanagh/.platformio/lib/Adafruit_DotStar-master",
+                "/Users/Matthew.Kavanagh/.platformio/lib/Arduino-IRremote-master/src",
                 "/Users/Matthew.Kavanagh/.platformio/lib/DHT sensor library for ESPx",
+                "/Users/Matthew.Kavanagh/.platformio/lib/FastLED-3.4.0/src",
+                "/Users/Matthew.Kavanagh/.platformio/lib/I2Cdev",
                 "/Users/Matthew.Kavanagh/.platformio/lib/IRremoteESP8266/src",
+                "/Users/Matthew.Kavanagh/.platformio/lib/MPU6050",
+                "/Users/Matthew.Kavanagh/.platformio/lib/OSC-0.0.0-alphasha.41b44981e3",
                 "/Users/Matthew.Kavanagh/.platformio/lib/OneButton-master/src",
+                "/Users/Matthew.Kavanagh/.platformio/lib/WiFiManager",
+                "/Users/Matthew.Kavanagh/.platformio/lib/i2cdevlib-master",
                 "/Users/Matthew.Kavanagh/.platformio/packages/framework-arduinoespressif8266/libraries/DNSServer/src",
                 "/Users/Matthew.Kavanagh/.platformio/packages/framework-arduinoespressif8266/libraries/EEPROM",
                 "/Users/Matthew.Kavanagh/.platformio/packages/framework-arduinoespressif8266/libraries/ESP8266AVRISP/src",
@@ -74,9 +83,17 @@
                     "/Users/Matthew.Kavanagh/.platformio/packages/framework-arduinoespressif8266/cores/esp8266",
                     "/Users/Matthew.Kavanagh/.platformio/packages/framework-arduinoespressif8266/tools/sdk/lwip2/include",
                     "/Users/Matthew.Kavanagh/.platformio/packages/framework-arduinoespressif8266/variants/d1_mini",
+                    "/Users/Matthew.Kavanagh/.platformio/lib/Adafruit_DotStar-master",
+                    "/Users/Matthew.Kavanagh/.platformio/lib/Arduino-IRremote-master/src",
                     "/Users/Matthew.Kavanagh/.platformio/lib/DHT sensor library for ESPx",
+                    "/Users/Matthew.Kavanagh/.platformio/lib/FastLED-3.4.0/src",
+                    "/Users/Matthew.Kavanagh/.platformio/lib/I2Cdev",
                     "/Users/Matthew.Kavanagh/.platformio/lib/IRremoteESP8266/src",
+                    "/Users/Matthew.Kavanagh/.platformio/lib/MPU6050",
+                    "/Users/Matthew.Kavanagh/.platformio/lib/OSC-0.0.0-alphasha.41b44981e3",
                     "/Users/Matthew.Kavanagh/.platformio/lib/OneButton-master/src",
+                    "/Users/Matthew.Kavanagh/.platformio/lib/WiFiManager",
+                    "/Users/Matthew.Kavanagh/.platformio/lib/i2cdevlib-master",
                     "/Users/Matthew.Kavanagh/.platformio/packages/framework-arduinoespressif8266/libraries/DNSServer/src",
                     "/Users/Matthew.Kavanagh/.platformio/packages/framework-arduinoespressif8266/libraries/EEPROM",
                     "/Users/Matthew.Kavanagh/.platformio/packages/framework-arduinoespressif8266/libraries/ESP8266AVRISP/src",
@@ -106,7 +123,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=50002",
+                "PLATFORMIO=50101",
                 "ESP8266",
                 "ARDUINO_ARCH_ESP8266",
                 "ARDUINO_ESP8266_WEMOS_D1MINI",
@@ -124,7 +141,6 @@
                 "VTABLES_IN_FLASH",
                 ""
             ],
-            "intelliSenseMode": "clang-x64",
             "cStandard": "c99",
             "cppStandard": "c++11",
             "compilerPath": "/Users/Matthew.Kavanagh/.platformio/packages/toolchain-xtensa/bin/xtensa-lx106-elf-gcc",

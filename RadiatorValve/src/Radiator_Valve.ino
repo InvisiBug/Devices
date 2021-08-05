@@ -1,4 +1,4 @@
-  ////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //  Matthew Kavanagh
 //
 //  Kavanet
@@ -14,7 +14,7 @@
 //   #  #  # # #      #      #    # #    # #           #
 //   #  #   ## #    # #      #    # #    # #      #    #
 //  ### #    #  ####  ######  ####  #####  ######  ####
-//
+// boop
 ////////////////////////////////////////////////////////////////////////
 #include <ArduinoJson.h>  // Json Library
 #include <ArduinoOTA.h>   // OTA
@@ -85,11 +85,12 @@ OneButton button(buttonPin, true);
 const char* wifiSsid = "I Don't Mind";
 const char* wifiPassword = "Have2Biscuits";
 
-const char* nodeName = "Our Room Radiator Valve";
-const char* nodePassword = "crm0xhvsmn";
+const char* nodeName = "Liams Desk Light";
+const char* nodePassword = "Kavanet";
 
-const char* disconnectMsg = "Our Room Radiator Valve Disconnected";
-const char* controlTopic = "Our Room Radiator Valve Control";
+const char* disconnectMsg = "Liams Desk Light Disconnected";
+const char* controlTopic = "Liams Desk Light Control";
+const char* buttonTopic = "Liams Desk Light Button";
 const char* mqttServerIP = "192.168.1.46";
 
 bool WiFiConnected = false;
@@ -167,5 +168,5 @@ void loop() {
 }
 
 void click() {
-  mqtt.publish("Our Room Radiator Valve Button", "1");
+  mqtt.publish(buttonTopic, "1");
 }
