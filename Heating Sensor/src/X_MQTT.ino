@@ -94,7 +94,7 @@ void publishSensors() {
   doc["humidity"] = ((float)((int)(sensor.readFloatHumidity() * 10))) / 10;
   doc["pressure"] = round(sensor.readFloatPressure() * 100) / 100;
   // doc["battery"] = (int)checkBattery();
-  doc["battery"] = 0;
+  // doc["battery"] = 0;
 
   char buffer[512];
   size_t n = serializeJson(doc, buffer);

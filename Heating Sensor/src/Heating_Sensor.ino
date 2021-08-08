@@ -98,7 +98,7 @@ long lastMQTTReconnectAttempt = 0;
 
 float temperature, humidity, pressure;
 
-int correctionFactor = -2.0;
+// int correctionFactor = -2.0;
 
 // boopest?
 ////////////////////////////////////////////////////////////////////////
