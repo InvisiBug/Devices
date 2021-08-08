@@ -1,11 +1,4 @@
 ////////////////////////////////////////////////////////////////////////
-//  Matthew Kavanagh
-//
-//  Nest
-//  MQTT.ino
-//  2017
-//  *********
-////////////////////////////////////////////////////////////////////////
 //
 //  #     #  #####  ####### #######
 //  ##   ## #     #    #       #
@@ -51,113 +44,113 @@ void handleMQTT() {
 void messageReceived(char* topic, byte* payload, unsigned int length) {
   // printMessage(payload, length);
 
-  if (!strcmp(topic, "Computer Power")) {
-    StaticJsonDocument<256> doc;
-    deserializeJson(doc, payload, length);
+  // if (!strcmp(topic, "Computer Power")) {
+  //   StaticJsonDocument<256> doc;
+  //   deserializeJson(doc, payload, length);
 
-    if (doc["state"] == false) {
-      computerOff = true;
-    } else {
-      computerOff = false;
-    }
+  //   if (doc["state"] == false) {
+  //     computerOff = true;
+  //   } else {
+  //     computerOff = false;
+  //   }
 
-    // Serial << "Computer: " << !computerOff << endl;
-  }
+  //   // Serial << "Computer: " << !computerOff << endl;
+  // }
 
-  if (!strcmp(topic, "Plug")) {
-    StaticJsonDocument<256> doc;
-    deserializeJson(doc, payload, length);
+  // if (!strcmp(topic, "Plug")) {
+  //   StaticJsonDocument<256> doc;
+  //   deserializeJson(doc, payload, length);
 
-    if (doc["state"] == false) {
-      plugOff = true;
-    } else {
-      plugOff = false;
-    }
+  //   if (doc["state"] == false) {
+  //     plugOff = true;
+  //   } else {
+  //     plugOff = false;
+  //   }
 
-    // Serial << "Plug: " << !plugOff << endl;
-  }
+  //   // Serial << "Plug: " << !plugOff << endl;
+  // }
 
-  if (!strcmp(topic, "Sun")) {
-    StaticJsonDocument<256> doc;
-    deserializeJson(doc, payload, length);
-    // Serial << doc["state"] << endl;
+  // if (!strcmp(topic, "Sun")) {
+  //   StaticJsonDocument<256> doc;
+  //   deserializeJson(doc, payload, length);
+  //   // Serial << doc["state"] << endl;
 
-    if (doc["state"] == false) {
-      sunOff = true;
-    } else {
-      sunOff = false;
-    }
+  //   if (doc["state"] == false) {
+  //     sunOff = true;
+  //   } else {
+  //     sunOff = false;
+  //   }
 
-    // Serial << "Sun: " << !sunOff << endl;
-  }
+  //   // Serial << "Sun: " << !sunOff << endl;
+  // }
 
-  if (!strcmp(topic, "Computer Audio")) {
-    StaticJsonDocument<256> doc;
-    deserializeJson(doc, payload, length);
+  // if (!strcmp(topic, "Computer Audio")) {
+  //   StaticJsonDocument<256> doc;
+  //   deserializeJson(doc, payload, length);
 
-    if (doc["Mixer"] == false) {
-      audioOff = true;
-    } else {
-      audioOff = false;
-    }
+  //   if (doc["Mixer"] == false) {
+  //     audioOff = true;
+  //   } else {
+  //     audioOff = false;
+  //   }
 
-    // Serial << "Audio : " << !audioOff << endl;
-  }
+  //   // Serial << "Audio : " << !audioOff << endl;
+  // }
 
-  if (!strcmp(topic, "Desk LEDs")) {
-    StaticJsonDocument<256> doc;
-    deserializeJson(doc, payload, length);
+  // if (!strcmp(topic, "Desk LEDs")) {
+  //   StaticJsonDocument<256> doc;
+  //   deserializeJson(doc, payload, length);
 
-    if ((doc["red"] > 0) or (doc["green"] > 0) or (doc["blue"] > 0)) {
-      deskOff = false;
+  //   if ((doc["red"] > 0) or (doc["green"] > 0) or (doc["blue"] > 0)) {
+  //     deskOff = false;
 
-      deskLEDsRed = doc["red"];
-      deskLEDsGreen = doc["green"];
-      deskLEDsBlue = doc["blue"];
-      // Serial << topic << "\t Red: " << deskLEDsRed << "\t Green: " << deskLEDsGreen << "\t Blue: " << deskLEDsBlue << endl;
-    } else {
-      deskOff = true;
-    }
-  }
+  //     deskLEDsRed = doc["red"];
+  //     deskLEDsGreen = doc["green"];
+  //     deskLEDsBlue = doc["blue"];
+  //     // Serial << topic << "\t Red: " << deskLEDsRed << "\t Green: " << deskLEDsGreen << "\t Blue: " << deskLEDsBlue << endl;
+  //   } else {
+  //     deskOff = true;
+  //   }
+  // }
 
-  if (!strcmp(topic, "Table Lamp")) {
-    StaticJsonDocument<256> doc;
-    deserializeJson(doc, payload, length);
+  // if (!strcmp(topic, "Table Lamp")) {
+  //   StaticJsonDocument<256> doc;
+  //   deserializeJson(doc, payload, length);
 
-    if ((doc["red"] > 0) or (doc["green"] > 0) or (doc["blue"] > 0)) {
-      lampOff = false;
+  //   if ((doc["red"] > 0) or (doc["green"] > 0) or (doc["blue"] > 0)) {
+  //     lampOff = false;
 
-      tableLampRed = doc["red"];
-      tableLampGreen = doc["green"];
-      tableLampBlue = doc["blue"];
-      // Serial << topic << "\t Red: " << tableLampRed << "\t Green: " << tableLampGreen << "\t Blue: " << tableLampBlue << endl;
-    } else {
-      lampOff = true;
-    }
-  }
+  //     tableLampRed = doc["red"];
+  //     tableLampGreen = doc["green"];
+  //     tableLampBlue = doc["blue"];
+  //     // Serial << topic << "\t Red: " << tableLampRed << "\t Green: " << tableLampGreen << "\t Blue: " << tableLampBlue << endl;
+  //   } else {
+  //     lampOff = true;
+  //   }
+  // }
 
-  if (!strcmp(topic, "Screen LEDs")) {
-    StaticJsonDocument<256> doc;
-    deserializeJson(doc, payload, length);
+  // if (!strcmp(topic, "Screen LEDs")) {
+  //   StaticJsonDocument<256> doc;
+  //   deserializeJson(doc, payload, length);
 
-    if ((doc["red"] > 0) or (doc["green"] > 0) or (doc["blue"] > 0)) {
-      screenLEDsOff = false;
+  //   if ((doc["red"] > 0) or (doc["green"] > 0) or (doc["blue"] > 0)) {
+  //     screenLEDsOff = false;
 
-      screenLEDsRed = doc["red"];
-      screenLEDsGreen = doc["green"];
-      screenLEDsBlue = doc["blue"];
+  //     screenLEDsRed = doc["red"];
+  //     screenLEDsGreen = doc["green"];
+  //     screenLEDsBlue = doc["blue"];
 
-      // Serial << topic << "\t Red: " << screenLEDsRed << "\t Green: " << screenLEDsGreen << "\t Blue: " << screenLEDsBlue << endl;
-    } else if (doc["mode"] == 0) {
-      screenLEDsOff = true;
-      ambientMode = false;
-    } else if (doc["mode"] == 1) {
-      screenLEDsOff = false;
-      ambientMode = true;
-    } else {
-      screenLEDsOff = true;
-    }
-  }
+  //     // Serial << topic << "\t Red: " << screenLEDsRed << "\t Green: " << screenLEDsGreen << "\t Blue: " << screenLEDsBlue << endl;
+  //   } else if (doc["mode"] == 0) {
+  //     screenLEDsOff = true;
+  //     ambientMode = false;
+  //   } else if (doc["mode"] == 1) {
+  //     screenLEDsOff = false;
+  //     ambientMode = true;
+  //   } else {
+  //     screenLEDsOff = true;
+  //   }
+  // }
 }
 
 void printMessage(byte* payload, int length) {
@@ -179,11 +172,11 @@ void printMessage(byte* payload, int length) {
 //
 ////////////////////////////////////////////////////////////////////////
 void subscribeToTopics() {
-  mqtt.subscribe("Computer Audio");
-  mqtt.subscribe("Computer Power");
-  mqtt.subscribe("Screen LEDs");
-  mqtt.subscribe("Table Lamp");
-  mqtt.subscribe("Desk LEDs");
-  mqtt.subscribe("Plug");
-  mqtt.subscribe("Sun");
+  // mqtt.subscribe("Computer Audio");
+  // mqtt.subscribe("Computer Power");
+  // mqtt.subscribe("Screen LEDs");
+  // mqtt.subscribe("Table Lamp");
+  // mqtt.subscribe("Desk LEDs");
+  // mqtt.subscribe("Plug");
+  // mqtt.subscribe("Sun");
 }

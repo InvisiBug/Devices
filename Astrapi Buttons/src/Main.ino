@@ -1,10 +1,4 @@
 ////////////////////////////////////////////////////////////////////////
-//  Matthew Kavanagh
-//
-//  Kavanet
-//  2019
-//  *********
-////////////////////////////////////////////////////////////////////////
 //
 //  ###
 //   #  #    #  ####  #      #    # #####  ######  ####
@@ -98,29 +92,6 @@ const char* mqttServerIP = "192.168.1.46";
 bool WiFiConnected = false;
 
 char msg[mqttLen];  // Buffer to store the MQTT messages
-
-// System Status Variables
-bool deskOff = false;
-bool lampOff = false;
-bool audioOff = false;
-bool plugOff = false;
-bool computerOff = false;
-bool screenLEDsOff = false;
-bool sunOff = false;
-
-int deskLEDsRed;
-int deskLEDsGreen;
-int deskLEDsBlue;
-
-int tableLampRed;
-int tableLampGreen;
-int tableLampBlue;
-
-int screenLEDsRed;
-int screenLEDsGreen;
-int screenLEDsBlue;
-
-bool ambientMode = false;
 
 long connectionTimeout = (2 * 1000);
 long lastWiFiReconnectAttempt = 0;
