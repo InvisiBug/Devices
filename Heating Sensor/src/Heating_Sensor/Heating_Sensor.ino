@@ -80,12 +80,12 @@ BME280 sensor;
 const char *wifiSsid = "I Don't Mind";
 const char *wifiPassword = "Have2Biscuits";
 
-const char *nodeName = "Our Room Heating Sensor";  // change for different room
+const char *nodeName = "Test Heating Sensor";  // change for different room
 const char *nodePassword = "crm0xhvsmn";
 
-const char *disconnectMsg = "Our Room Heating Sensor Disconnected";
+const char *disconnectMsg = "Test Heating Sensor Disconnected";
 
-const char *mqttServerIP = "192.168.1.46";
+const char *mqttServerIP = "192.168.1.11";
 
 bool WiFiConnected = false;
 

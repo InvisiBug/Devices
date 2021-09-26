@@ -153,11 +153,11 @@ void startSensors() {
   pinMode(sensorPowerPin, OUTPUT);
   digitalWrite(sensorPowerPin, HIGH);
 
-  if (sensor.beginI2C() == false) {   //Begin communication over I2C
+  if (sensor.beginI2C() == false) {  //Begin communication over I2C
     Serial.println("The sensor did not respond. Please check wiring.");
   }
 
-  sensor.setTemperatureCorrection(correctionFactor);
+  // sensor.setTemperatureCorrection(correctionFactor);
 }
 
 void disableSensor() {
