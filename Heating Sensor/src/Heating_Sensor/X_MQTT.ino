@@ -86,17 +86,19 @@ void subscribeToTopics() {
 //
 ////////////////////////////////////////////////////////////////////////
 void publishSensors() {
-  const size_t capacity = JSON_OBJECT_SIZE(7);  // This should only be 3 not 6, think its a bug
-  DynamicJsonDocument doc(capacity);
+  // const size_t capacity = JSON_OBJECT_SIZE(7);  // This should only be 3 not 6, think its a bug
+  // DynamicJsonDocument doc(capacity);
+
+  StaticJsonDocument<128> doc;
 
   doc["node"] = nodeName;
   doc["temperature"] = getTemperature();
   doc["humidity"] = ((float)((int)(sensor.readFloatHumidity() * 10))) / 10;
   doc["pressure"] = round(sensor.readFloatPressure() * 100) / 100;
-  // doc["battery"] = (int)checkBattery();
-  // doc["battery"] = 0;
 
-  char buffer[512];
+  char buffer[128];
   size_t n = serializeJson(doc, buffer);
   mqtt.publish(nodeName, buffer, n);
+
+  Serial << buffer << endl;
 }

@@ -43,8 +43,6 @@
 ////////////////////////////////////////////////////////////////////////
 #define connectionLED LED_BUILTIN
 
-#define sensorPowerPin D6
-
 #define ON LOW  // Confirmed for Wemos D1 Mini (On - High for esp 32)
 #define OFF HIGH
 
@@ -80,12 +78,12 @@ BME280 sensor;
 const char *wifiSsid = "I Don't Mind";
 const char *wifiPassword = "Have2Biscuits";
 
-const char *nodeName = "Test Heating Sensor";  // change for different room
+const char *nodeName = "Our Room Heating Sensor";  // change for different room
 const char *nodePassword = "crm0xhvsmn";
 
-const char *disconnectMsg = "Test Heating Sensor Disconnected";
+const char *disconnectMsg = "Our Room Heating Sensor Disconnected";
 
-const char *mqttServerIP = "192.168.1.11";
+const char *mqttServerIP = "192.168.1.46";
 
 bool WiFiConnected = false;
 
@@ -98,9 +96,6 @@ long lastMQTTReconnectAttempt = 0;
 
 float temperature, humidity, pressure;
 
-// int correctionFactor = -2.0;
-
-// boopest?
 ////////////////////////////////////////////////////////////////////////
 //
 //  ######                                                #####
@@ -120,7 +115,6 @@ void setup() {
 
   startWifi();
   startMQTT();
-  startOTA();
 
   startSensors();
 }
@@ -147,7 +141,6 @@ void loop(void) {
 
     if (WiFiConnected) {
       publishSensors();
-      Serial << "Sending Data" << endl;
     }
   }
 }
