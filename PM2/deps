@@ -1,0 +1,7 @@
+  ; adafruit/Adafruit PM25 AQI Sensor @ ^1.0.6
+  ; thingpulse/ESP8266 and ESP32 OLED driver for SSD1306 displays @ ^4.2.1
+  ; hpsaturn/CanAirIO Air Quality Sensors Library @ ^0.3.7
+
+  ;  PM2 sensor
+  ; avaldebe/PMSerial @ ^1.1.1
+  ; EspSoftwareSerial@>=6.7.1
