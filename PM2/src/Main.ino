@@ -1,15 +1,4 @@
 ////////////////////////////////////////////////////////////////////////
-//  Matthew Kavanagh
-//
-//  Kavanet
-//  Heating Sensor.ino
-//  2020
-//
-//  Pins
-//  D1 - SCL
-//  D2 - SDA
-//
-////////////////////////////////////////////////////////////////////////
 //
 //  ###
 //   #  #    #  ####  #      #    # #####  ######  ####
@@ -25,12 +14,11 @@
 #include <ESP8266WiFi.h>
 #include <PMserial.h>
 #include <PubSubClient.h>  // MQTT
-#include <Streaming.h>     // Serial Printouts
-#include <WiFiClient.h>    //
+#include <SSD1306Wire.h>
+#include <Streaming.h>   // Serial Printouts
+#include <WiFiClient.h>  //
 #include <WiFiManager.h>
 #include <Wire.h>  // SPI Comms
-
-#include "SSD1306Wire.h"
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -63,6 +51,7 @@
 WiFiClient espClient;
 PubSubClient mqtt(espClient);
 
+// Co2 Sensor
 AirGradient ag = AirGradient();
 
 // PMS5003 particulate matter sensor
@@ -114,8 +103,9 @@ int co2;
 //
 ////////////////////////////////////////////////////////////////////////
 void setup() {
-  Serial.begin(115200);
+  // Serial.begin(115200);
   // Serial.begin(9600);
+  Serial.begin(76800);
   Serial << "\n| " << nodeName << " |" << endl;
 
   pinMode(connectionLED, OUTPUT);
