@@ -1,4 +1,11 @@
 ////////////////////////////////////////////////////////////////////////
+//  Matthew Kavanagh
+//
+//  Nest
+//  Functions.ino
+//  2017
+//  *********
+////////////////////////////////////////////////////////////////////////
 //
 //  #     #   #######
 //  #  #  # # #       #
@@ -10,34 +17,21 @@
 //
 ////////////////////////////////////////////////////////////////////////
 void startWifi() {
-  WiFi.mode(WIFI_OFF);                 // Clears the last wifi credentials
-  WiFi.mode(WIFI_STA);                 // Wifi Modes (WIFI_OFF, WIFI_STA, WIFI_AP, WIFI_AP_STA)
-  WiFi.begin(wifiSsid, wifiPassword);  // Dont put give the ESP a host name, it screws up the wifi causing disconnects
-  // digitalWrite(connectionLED, invertConnectionLED ? OFF : ON);
-}
+  WiFi.mode(WIFI_OFF);  // Clears the last wifi credentials
+  WiFi.mode(WIFI_STA);  // Wifi Modes (WIFI_OFF, WIFI_STA, WIFI_AP, WIFI_AP_STA)
+  WiFi.begin(wifiSsid, wifiPassword);
 
-void handleWiFi() {
-  if (WiFi.status() != WL_CONNECTED)  // Wait for wifi connection
+  while (WiFi.status() != WL_CONNECTED)  // Wait for wifi connection
   {
-    WiFiConnected = false;
-    // digitalWrite(connectionLED, invertConnectionLED ? OFF : ON);
-    digitalWrite(connectionLED, ON);
-
-    long now = millis();
-    if (now - lastWiFiReconnectAttempt > connectionTimeout) {
-      lastWiFiReconnectAttempt = now;
-      Serial << ".";
-    }
+    Serial << ".";
+    delay(500);
+    digitalWrite(statusLED, ON);  // Turn on green LED when connecting
   }
+  digitalWrite(statusLED, OFF);  // Turn off green LED when connection is established
 
-  if ((WiFi.status() == WL_CONNECTED) && (!WiFiConnected)) {
-    WiFiConnected = true;
-    // digitalWrite(connectionLED, invertConnectionLED ? ON : OFF);  // Turn off onboard led when connected
-    digitalWrite(connectionLED, OFF);
-    Serial << endl;
-    Serial << "| Connected to " << wifiSsid << " |" << endl;
-    Serial << "| IP address : " << WiFi.localIP() << " |" << endl;
-  }
+  Serial << endl;
+  Serial << "| Connected to " << wifiSsid << " |" << endl;
+  Serial << "| IP address  : " << WiFi.localIP() << " |" << endl;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -88,15 +82,39 @@ void startOTA() {
 
 ////////////////////////////////////////////////////////////////////////
 //
-// ######
-// #     # ###### #        ##   #   #
-// #     # #      #       #  #   # #
-// ######  #####  #      #    #   #
-// #   #   #      #      ######   #
-// #    #  #      #      #    #   #
-// #     # ###### ###### #    #   #
+//  #######
+//     #    # #    # ######
+//     #    # ##  ## #
+//     #    # # ## # #####
+//     #    # #    # #
+//     #    # #    # #
+//     #    # #    # ######
 //
 ////////////////////////////////////////////////////////////////////////
+void startTime() {
+  timeClient.begin();
+  timeClient.update();
+  Serial << "| Time " << timeClient.getFormattedTime() << " |" << endl;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+//  #####                                      ######
+// #     # #   #  ####  ##### ###### #    #    #     #   ##   #####   ##
+// #        # #  #        #   #      ##  ##    #     #  #  #    #    #  #
+//  #####    #    ####    #   #####  # ## #    #     # #    #   #   #    #
+//       #   #        #   #   #      #    #    #     # ######   #   ######
+// #     #   #   #    #   #   #      #    #    #     # #    #   #   #    #
+//  #####    #    ####    #   ###### #    #    ######  #    #   #   #    #
+//
+////////////////////////////////////////////////////////////////////////
+void changeRelayState() {
+  if (relayState)
+    relayOff();
+  else
+    relayOn();
+}
+
 void relayOn() {
   Serial << "Relay On" << endl;
 

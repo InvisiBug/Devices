@@ -128,12 +128,12 @@ void button3Held() {
 ///////////////////////////////////////////////////////////////////////
 void button4Clicked() {
   Serial << "FloodLight" << endl;
-  if (plugOff) {
-    snprintf(msg, mqttLen, "%c %s", '1', "Plug Control");
-    mqtt.publish("Plug Control", msg);
+  if (floodlightOff) {
+    snprintf(msg, mqttLen, "%c %s", '1', "Floodlight Control");
+    mqtt.publish("Floodlight Control", msg);
   } else {
-    snprintf(msg, mqttLen, "%c %s", '0', "Plug Control");
-    mqtt.publish("Plug Control", msg);
+    snprintf(msg, mqttLen, "%c %s", '0', "Floodlight Control");
+    mqtt.publish("Floodlight Control", msg);
   }
 }
 

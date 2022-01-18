@@ -1,10 +1,4 @@
-////////////////////////////////////////////////////////////////////////
-//  Matthew Kavanagh
-//
-//  Kavanet
-//  Heating Controller
-//  28/12/2019
-//
+
 ////////////////////////////////////////////////////////////////////////
 //
 //  ###
@@ -34,25 +28,24 @@
 //  ######  ###### #      # #    # #   #   #  ####  #    #  ####
 //
 ////////////////////////////////////////////////////////////////////////
-// // Physical I/O
-// #define connectionLED 13
-// #define relayPin 12
-// #define buttonPin 0
+// Physical I/O
+#define connectionLED 13
+#define relayPin 12
+#define buttonPin 0
 // // I/O Logic
 #define ON LOW
 #define OFF HIGH
 
 // Test Board I/O
-#define connectionLED D7
-#define relayPin D5
-#define buttonPin D3
+// #define connectionLED D7
+// #define relayPin D5
+// #define buttonPin D3
 // I/O Logic
 // #define ON HIGH
 // #define OFF LOW
 
 // MQTT
 #define qos 0
-
 #define mqttLen 50  // Buffer for non JSON MQTT comms
 
 ////////////////////////////////////////////////////////////////////////
@@ -87,12 +80,12 @@ OneButton button(buttonPin, true);
 const char* wifiSsid = "I Don't Mind";
 const char* wifiPassword = "Have2Biscuits";
 
-const char* nodeName = "Heating";
+const char* nodeName = "Floodlight";
 const char* nodePassword = "crm0xhvsmn";
 
-const char* disconnectMsg = "Heating Disconnected";
-const char* controlTopic = "Heating Control";
-const char* mqttServerIP = "192.168.1.46";
+const char* disconnectMsg = "Floodlight Disconnected";
+const char* controlTopic = "Floodlight Control";
+const char* mqttServerIP = "mqtt.kavanet.io";
 
 bool WiFiConnected = false;
 
@@ -138,7 +131,7 @@ void setup() {
 
   startWifi();
   startMQTT();
-  startOTA();
+  // startOTA();
 
   button.attachClick(click);
   button.setDebounceTicks(50);
@@ -158,7 +151,6 @@ void setup() {
 void loop() {
   handleWiFi();
   handleMQTT();
-  ArduinoOTA.handle();
   button.tick();
 
   updateCurrentMillis = millis();
@@ -171,4 +163,5 @@ void loop() {
 
 void click() {
   mqtt.publish("Heating Button", "1");
+  changeRelayState();
 }

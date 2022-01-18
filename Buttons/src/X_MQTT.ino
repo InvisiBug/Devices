@@ -64,17 +64,17 @@ void messageReceived(char* topic, byte* payload, unsigned int length) {
     // Serial << "Computer: " << !computerOff << endl;
   }
 
-  if (!strcmp(topic, "Plug")) {
+  if (!strcmp(topic, "Floodlight")) {
     StaticJsonDocument<256> doc;
     deserializeJson(doc, payload, length);
 
     if (doc["state"] == false) {
-      plugOff = true;
+      floodlightOff = true;
     } else {
-      plugOff = false;
+      floodlightOff = false;
     }
 
-    // Serial << "Plug: " << !plugOff << endl;
+    // Serial << "Plug: " << !floodlightOff << endl;
   }
 
   if (!strcmp(topic, "Sun")) {
@@ -179,11 +179,12 @@ void printMessage(byte* payload, int length) {
 //
 ////////////////////////////////////////////////////////////////////////
 void subscribeToTopics() {
-  mqtt.subscribe("Computer Audio");
-  mqtt.subscribe("Computer Power");
-  mqtt.subscribe("Screen LEDs");
-  mqtt.subscribe("Table Lamp");
-  mqtt.subscribe("Desk LEDs");
-  mqtt.subscribe("Plug");
-  mqtt.subscribe("Sun");
+  // mqtt.subscribe("Computer Audio");
+  // mqtt.subscribe("Computer Power");
+  // mqtt.subscribe("Screen LEDs");
+  // mqtt.subscribe("Table Lamp");
+  // mqtt.subscribe("Desk LEDs");
+  // mqtt.subscribe("Sun");
+
+  mqtt.subscribe("#");
 }

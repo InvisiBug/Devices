@@ -93,7 +93,7 @@ const char* nodeName = "Buttons 2";
 
 const char* disconnectMsg = "Buttons Disconnected";
 
-const char* mqttServerIP = "192.168.1.46";
+const char* mqttServerIP = "mqtt.kavanet.io";
 
 bool WiFiConnected = false;
 
@@ -103,7 +103,7 @@ char msg[mqttLen];  // Buffer to store the MQTT messages
 bool deskOff = false;
 bool lampOff = false;
 bool audioOff = false;
-bool plugOff = false;
+bool floodlightOff = false;
 bool computerOff = false;
 bool screenLEDsOff = false;
 bool sunOff = false;
