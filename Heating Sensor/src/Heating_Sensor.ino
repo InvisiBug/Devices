@@ -20,19 +20,16 @@
 //  ### #    #  ####  ######  ####  #####  ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-#include <ArduinoJson.h>   // Json
-#include <ArduinoOTA.h>    // OTA
-#include <NTPClient.h>     // Time
-#include <PubSubClient.h>  // MQTT
-// #include <SparkFunBME280.h>  // BME 280 Library
-#include <BMx280I2C.h>
-#include <SPI.h>
-#include <Streaming.h>  // Serial Printouts
+#include <ArduinoJson.h>     // Json
+#include <ArduinoOTA.h>      // OTA
+#include <NTPClient.h>       // Time
+#include <PubSubClient.h>    // MQTT
+#include <SparkFunBME280.h>  // BME 280 Library
+#include <Streaming.h>       // Serial Printouts
 #include <String.h>
 #include <WiFiClient.h>  //
 #include <Wire.h>        // SPI Comms
 
-#define I2C_ADDRESS 0x77
 ////////////////////////////////////////////////////////////////////////
 //
 //  ######
@@ -65,9 +62,7 @@ WiFiClient espClient;
 PubSubClient mqtt(espClient);
 
 // Sensor
-// BME280 sensor;
-
-BMx280I2C bmx280(I2C_ADDRESS);
+BME280 sensor;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -117,10 +112,9 @@ void setup() {
   Serial << "\n| " << nodeName << " |" << endl;
 
   pinMode(connectionLED, OUTPUT);
-  digitalWrite(D6, HIGH);
 
-  // startWifi();
-  // startMQTT();
+  startWifi();
+  startMQTT();
 
   startSensors();
 }
@@ -137,43 +131,16 @@ void setup() {
 //
 ///////////////////////////////////////////////////////////////////////
 void loop(void) {
-  // handleWiFi();
-  // handleMQTT();
-  // ArduinoOTA.handle();
+  handleWiFi();
+  handleMQTT();
+  ArduinoOTA.handle();
 
-  // unsigned long currentMillis = millis();
-  // if (currentMillis - previousMillis >= interval) {
-  //   previousMillis = currentMillis;
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
 
-  //   if (WiFiConnected) {
-  //     publishSensors();
-  //   }
-  // }
-
-  delay(1000);
-
-  // start a measurement
-  if (!bmx280.measure()) {
-    Serial.println("could not start measurement, is a measurement already running?");
-    return;
-  }
-
-  // wait for the measurement to finish
-  do {
-    delay(100);
-  } while (!bmx280.hasValue());
-
-  Serial.print("Pressure: ");
-  Serial.println(bmx280.getPressure());
-  Serial.print("Pressure (64 bit): ");
-  Serial.println(bmx280.getPressure64());
-  Serial.print("Temperature: ");
-  Serial.println(bmx280.getTemperature());
-
-  // important: measurement data is read from the sensor in function hasValue() only.
-  // make sure to call get*() functions only after hasValue() has returned true.
-  if (bmx280.isBME280()) {
-    Serial.print("Humidity: ");
-    Serial.println(bmx280.getHumidity());
+    if (WiFiConnected) {
+      publishSensors();
+    }
   }
 }
