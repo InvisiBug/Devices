@@ -64,6 +64,8 @@ void handleWiFi() {
 //
 ////////////////////////////////////////////////////////////////////////
 void startSensors() {
+  pinMode(D6, OUTPUT);
+  digitalWrite(D6, HIGH);
   if (sensor.beginI2C() == false) {  // Begin communication over I2C
     Serial.println("The sensor did not respond. Please check wiring.");
   }

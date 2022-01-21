@@ -78,10 +78,10 @@ BME280 sensor;
 const char *wifiSsid = "I Don't Mind";
 const char *wifiPassword = "Have2Biscuits";
 
-const char *nodeName = "Front Study Sensor";  // change for different room
+const char *nodeName = "Living Room Sensor";  // change for different room
 const char *nodePassword = "crm0xhvsmn";
 
-const char *disconnectMsg = "Front Study Sensor Disconnected";
+const char *disconnectMsg = "Living Room Sensor Disconnected";
 
 const char *mqttServerIP = "mqtt.kavanet.io";
 
