@@ -1,4 +1,3 @@
-
 ////////////////////////////////////////////////////////////////////////
 //
 //  ###
@@ -10,12 +9,16 @@
 //  ### #    #  ####  ######  ####  #####  ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-#include <ArduinoJson.h>  // Json Library
-#include <ArduinoOTA.h>   // OTA
-#include <OneButton.h>
+#include <AirGradient.h>
+#include <ArduinoJson.h>  // Json
+#include <ESP8266WiFi.h>
+#include <PMserial.h>
 #include <PubSubClient.h>  // MQTT
-#include <Streaming.h>     // Serial printouts
-#include <WiFiClient.h>    // Wifi
+#include <SSD1306Wire.h>
+#include <Streaming.h>   // Serial Printouts
+#include <WiFiClient.h>  //
+#include <WiFiManager.h>
+#include <Wire.h>  // SPI Comms
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -28,25 +31,10 @@
 //  ######  ###### #      # #    # #   #   #  ####  #    #  ####
 //
 ////////////////////////////////////////////////////////////////////////
-// Physical I/O
-#define connectionLED 13
-#define relayPin 12
-#define buttonPin 0
-// // I/O Logic
-#define ON LOW
+#define connectionLED LED_BUILTIN
+
+#define ON LOW  // Confirmed for Wemos D1 Mini (On - High for esp 32)
 #define OFF HIGH
-
-// Test Board I/O
-// #define connectionLED D7
-// #define relayPin D5
-// #define buttonPin D3
-// I/O Logic
-// #define ON HIGH
-// #define OFF LOW
-
-// MQTT
-#define qos 0
-#define mqttLen 50  // Buffer for non JSON MQTT comms
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -59,12 +47,15 @@
 //  #     # #    # #    # #####  #    # #    # #    # ######
 //
 ////////////////////////////////////////////////////////////////////////
-// MQTT CLient
+// MQTT Client
 WiFiClient espClient;
 PubSubClient mqtt(espClient);
 
-// Button
-OneButton button(buttonPin, true);
+// Co2 Sensor
+AirGradient ag = AirGradient();
+
+// PMS5003 particulate matter sensor
+SerialPM pms(PMS5003, PMS_RX, PMS_TX);
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -77,35 +68,28 @@ OneButton button(buttonPin, true);
 //     #    #    # #    # # #    # #####  ###### ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-const char* wifiSsid = "I Don't Mind";
-const char* wifiPassword = "Have2Biscuits";
+const char *wifiSsid = "I Don't Mind";
+const char *wifiPassword = "Have2Biscuits";
 
-const char* nodeName = "Living Room Valve";
-const char* nodePassword = "crm0xhvsmn";
+const char *nodeName = "pm2";  // change for different room
+const char *nodePassword = "crm0xhvsmn";
 
-const char* disconnectMsg = "Living Room Valve Disconnected";
-const char* controlTopic = "Living Room Valve Control";
-const char* mqttServerIP = "mqtt.kavanet.io";
+const char *disconnectMsg = "pm2 Sensor Disconnected";
+
+const char *mqttServerIP = "mqtt.kavanet.io";
 
 bool WiFiConnected = false;
 
-char msg[mqttLen];  // Buffer to store the MQTT messages
+long interval = (5 * 1000);  // Wait time before taking reading
+unsigned long previousMillis = 0;
 
-// Connection Timers
 long connectionTimeout = (2 * 1000);
 long lastWiFiReconnectAttempt = 0;
 long lastMQTTReconnectAttempt = 0;
 
-// Status Update
-unsigned long updateCurrentMillis;
-unsigned long updatePreviousMillis;
-
-// unsigned long timerCurrentMillis  = 0;
-unsigned long timerPreviousMillis = 0;
-
-bool relayState = false;
-bool buttonState = false;
-bool lastButtonState = false;
+float temperature, humidity, pressure;
+int pm2;
+int co2;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -119,22 +103,22 @@ bool lastButtonState = false;
 //
 ////////////////////////////////////////////////////////////////////////
 void setup() {
-  Serial.begin(115200);
-  Serial << "\n|** " << nodeName << " **|" << endl;
+  // Serial.begin(115200);
+  // Serial.begin(9600);
+  Serial.begin(76800);
+  Serial << "\n| " << nodeName << " |" << endl;
 
   pinMode(connectionLED, OUTPUT);
 
-  pinMode(relayPin, OUTPUT);
-  pinMode(buttonPin, INPUT);
-
-  digitalWrite(relayPin, false);
-
   startWifi();
   startMQTT();
-  // startOTA();
 
-  button.attachClick(click);
-  button.setDebounceTicks(50);
+  ag.PMS_Init();
+  ag.CO2_Init();
+
+  pms.init();
+
+  // startSensors();
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -148,19 +132,16 @@ void setup() {
 //  #     # #    # # #    #    #       #    #  ####   ####  #    # #    # #    #
 //
 ///////////////////////////////////////////////////////////////////////
-void loop() {
+void loop(void) {
   handleWiFi();
   handleMQTT();
-  button.tick();
 
-  updateCurrentMillis = millis();
-  if (updateCurrentMillis - updatePreviousMillis >= 5 * 1000) {
-    updatePreviousMillis = updateCurrentMillis;
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
 
-    publishAll();
+    if (WiFiConnected) {
+      publishSensors();
+    }
   }
-}
-
-void click() {
-  changeRelayState();
 }
