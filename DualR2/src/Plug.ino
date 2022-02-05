@@ -30,7 +30,8 @@
 ////////////////////////////////////////////////////////////////////////
 // Physical I/O
 #define connectionLED 13
-#define relayPin 12
+#define relay1Pin 12
+#define relay2Pin 5
 #define buttonPin 0
 // // I/O Logic
 #define ON LOW
@@ -80,11 +81,11 @@ OneButton button(buttonPin, true);
 const char* wifiSsid = "I Don't Mind";
 const char* wifiPassword = "Have2Biscuits";
 
-const char* nodeName = "Floodlight";
+const char* nodeName = "Heating";
 const char* nodePassword = "crm0xhvsmn";
 
-const char* disconnectMsg = "Floodlight Disconnected";
-const char* controlTopic = "Floodlight Control";
+const char* disconnectMsg = "Heating Disconnected";
+const char* controlTopic = "Heating Control";
 const char* mqttServerIP = "mqtt.kavanet.io";
 
 bool WiFiConnected = false;
@@ -119,15 +120,17 @@ bool lastButtonState = false;
 //
 ////////////////////////////////////////////////////////////////////////
 void setup() {
-  Serial.begin(115200);
-  Serial << "\n|** " << nodeName << " **|" << endl;
+  Serial.begin(19200);
+  // Serial << "\n|** " << nodeName << " **|" << endl;
 
   pinMode(connectionLED, OUTPUT);
 
-  pinMode(relayPin, OUTPUT);
+  pinMode(relay1Pin, OUTPUT);
+  pinMode(relay2Pin, OUTPUT);
   pinMode(buttonPin, INPUT);
 
-  digitalWrite(relayPin, false);
+  digitalWrite(relay1Pin, false);
+  digitalWrite(relay2Pin, false);
 
   startWifi();
   startMQTT();

@@ -64,7 +64,7 @@ void messageReceived(char* topic, byte* payload, unsigned int length) {
     // Serial << "Computer: " << !computerOff << endl;
   }
 
-  if (!strcmp(topic, "Plug")) {
+  if (!strcmp(topic, "Floodlight")) {
     StaticJsonDocument<256> doc;
     deserializeJson(doc, payload, length);
 
