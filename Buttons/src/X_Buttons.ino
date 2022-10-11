@@ -96,7 +96,7 @@ void button3Clicked() {
   const size_t capacity = JSON_OBJECT_SIZE(3);
   DynamicJsonDocument doc(capacity);
 
-  if (lampOff) {
+  if (tableLampOff) {
     doc["red"] = tableLampRed;
     doc["green"] = tableLampGreen;
     doc["blue"] = tableLampBlue;
@@ -106,7 +106,7 @@ void button3Clicked() {
     doc["blue"] = 0;
   }
 
-  lampOff = !lampOff;
+  tableLampOff = !tableLampOff;
 
   char buffer[512];
   size_t n = serializeJson(doc, buffer);
@@ -127,13 +127,13 @@ void button3Held() {
 //
 ///////////////////////////////////////////////////////////////////////
 void button4Clicked() {
-  Serial << "Floodlight" << endl;
-  if (floodlightOff) {
-    snprintf(msg, mqttLen, "%c %s", '1', "Floodlight Control");
-    mqtt.publish("Floodlight Control", msg);
+  Serial << "Sun" << endl;
+  if (sunOff) {
+    snprintf(msg, mqttLen, "%c %s", '1', "Sun Control");
+    mqtt.publish("Sun Control", msg);
   } else {
-    snprintf(msg, mqttLen, "%c %s", '0', "Floodlight Control");
-    mqtt.publish("Floodlight Control", msg);
+    snprintf(msg, mqttLen, "%c %s", '0', "Sun Control");
+    mqtt.publish("Sun Control", msg);
   }
 }
 
@@ -151,13 +151,13 @@ void button4Held() {
 //
 ///////////////////////////////////////////////////////////////////////
 void button5Clicked() {
-  Serial << "Speakers" << endl;
-  if (audioOff) {
-    snprintf(msg, mqttLen, "%i", 1);
-    mqtt.publish("Computer Audio Control", msg);
+  Serial << "Lamp" << endl;
+  if (lampOff) {
+    snprintf(msg, mqttLen, "%c %s", '1', "Lamp Control");
+    mqtt.publish("Lamp Control", msg);
   } else {
-    snprintf(msg, mqttLen, "%i", 0);
-    mqtt.publish("Computer Audio Control", msg);
+    snprintf(msg, mqttLen, "%c %s", '0', "Lamp Control");
+    mqtt.publish("Lamp Control", msg);
   }
 }
 
@@ -175,13 +175,13 @@ void button5Held() {
 //
 ///////////////////////////////////////////////////////////////////////
 void button6Clicked() {
-  Serial << "Sun" << endl;
-  if (sunOff) {
-    snprintf(msg, mqttLen, "%c %s", '1', "Sun Control");
-    mqtt.publish("Sun Control", msg);
+  Serial << "Floodlight" << endl;
+  if (floodlightOff) {
+    snprintf(msg, mqttLen, "%c %s", '1', "Floodlight Control");
+    mqtt.publish("Floodlight Control", msg);
   } else {
-    snprintf(msg, mqttLen, "%c %s", '0', "Sun Control");
-    mqtt.publish("Sun Control", msg);
+    snprintf(msg, mqttLen, "%c %s", '0', "Floodlight Control");
+    mqtt.publish("Floodlight Control", msg);
   }
 }
 
@@ -199,9 +199,15 @@ void button6Held() {
 //
 ///////////////////////////////////////////////////////////////////////
 void button7Clicked() {
-  // mqtt.publish("Heating Button", "1");
+  Serial << "Speakers" << endl;
+  if (audioOff) {
+    snprintf(msg, mqttLen, "%i", 1);
+    mqtt.publish("Computer Audio Control", msg);
+  } else {
+    snprintf(msg, mqttLen, "%i", 0);
+    mqtt.publish("Computer Audio Control", msg);
+  }
 }
 
 void button7Held() {
-  mqtt.publish("Heating Button", "1");
 }

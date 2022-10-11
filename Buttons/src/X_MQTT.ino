@@ -91,6 +91,20 @@ void messageReceived(char* topic, byte* payload, unsigned int length) {
     // Serial << "Sun: " << !sunOff << endl;
   }
 
+  if (!strcmp(topic, "Lamp")) {
+    StaticJsonDocument<256> doc;
+    deserializeJson(doc, payload, length);
+    // Serial << doc["state"] << endl;
+
+    if (doc["state"] == false) {
+      lampOff = true;
+    } else {
+      lampOff = false;
+    }
+
+    // Serial << "Sun: " << !sunOff << endl;
+  }
+
   if (!strcmp(topic, "Computer Audio")) {
     StaticJsonDocument<256> doc;
     deserializeJson(doc, payload, length);
@@ -125,14 +139,14 @@ void messageReceived(char* topic, byte* payload, unsigned int length) {
     deserializeJson(doc, payload, length);
 
     if ((doc["red"] > 0) or (doc["green"] > 0) or (doc["blue"] > 0)) {
-      lampOff = false;
+      tableLampOff = false;
 
       tableLampRed = doc["red"];
       tableLampGreen = doc["green"];
       tableLampBlue = doc["blue"];
       // Serial << topic << "\t Red: " << tableLampRed << "\t Green: " << tableLampGreen << "\t Blue: " << tableLampBlue << endl;
     } else {
-      lampOff = true;
+      tableLampOff = true;
     }
   }
 

@@ -102,6 +102,7 @@ char msg[mqttLen];  // Buffer to store the MQTT messages
 // System Status Variables
 bool deskOff = false;
 bool lampOff = false;
+bool tableLampOff = false;
 bool audioOff = false;
 bool floodlightOff = false;
 bool computerOff = false;

@@ -1,3 +1,4 @@
+// Used to suppress crazy amount of spelling error messages (doesn't recognise mqtt)
 {
     "version": "0.2",
     "ignorePaths": [],

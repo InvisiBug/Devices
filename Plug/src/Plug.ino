@@ -11,7 +11,7 @@
 //
 ////////////////////////////////////////////////////////////////////////
 #include <ArduinoJson.h>  // Json Library
-#include <ArduinoOTA.h>   // OTA
+#include <ESP8266WiFi.h>  // WiFi
 #include <OneButton.h>
 #include <PubSubClient.h>  // MQTT
 #include <Streaming.h>     // Serial printouts
@@ -80,11 +80,11 @@ OneButton button(buttonPin, true);
 const char* wifiSsid = "I Don't Mind";
 const char* wifiPassword = "Have2Biscuits";
 
-const char* nodeName = "Floodlight";
+const char* nodeName = "Lamp";
 const char* nodePassword = "crm0xhvsmn";
 
-const char* disconnectMsg = "Floodlight Disconnected";
-const char* controlTopic = "Floodlight Control";
+const char* disconnectMsg = "Lamp Disconnected";
+const char* controlTopic = "Lamp Control";
 const char* mqttServerIP = "mqtt.kavanet.io";
 
 bool WiFiConnected = false;
