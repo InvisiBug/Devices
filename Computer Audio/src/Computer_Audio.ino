@@ -29,9 +29,9 @@
 //  ### #    #  ####  ######  ####  #####  ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-#include <ArduinoJson.h>   // Json Library
-#include <ArduinoOTA.h>    // OTA
-#include <ESP8266WiFi.h>   // WiFi
+#include <ArduinoJson.h>  // Json Library
+#include <ESP8266WiFi.h>  // WiFi
+#include <OneButton.h>
 #include <PubSubClient.h>  // MQTT
 #include <Streaming.h>     // Serial Printouts
 #include <WiFiClient.h>    // May not be needed
@@ -85,6 +85,11 @@
 WiFiClient espClient;
 PubSubClient mqtt(espClient);
 
+OneButton button1(l1Button, true);
+OneButton button2(l2Button, true);
+OneButton button3(l3Button, true);
+OneButton button4(l4Button, true);
+
 ////////////////////////////////////////////////////////////////////////
 //
 //  #     #
@@ -105,21 +110,11 @@ char* nodePassword = "crm0xhvsmn";
 
 char* controlTopic = "Computer Audio Control";
 
-char* mqttServerIP = "192.168.1.46";
+char* mqttServerIP = "mqtt.kavanet.io";
 
 bool WiFiConnected = false;
 
 char msg[mqttLen];  // Buffer to store the MQTT messages
-
-bool buttonOneState;
-bool buttonTwoState;
-bool buttonThreeState;
-bool buttonFourState;
-
-bool lastButtonOneState;
-bool lastButtonTwoState;
-bool lastButtonThreeState;
-bool lastButtonFourState;
 
 long interval = (5 * 1000);  // Update every 5 seconds
 unsigned long previousMillis = 0;
@@ -127,8 +122,6 @@ unsigned long previousMillis = 0;
 long connectionTimeout = (2 * 1000);
 long lastWiFiReconnectAttempt = 0;
 long lastMQTTReconnectAttempt = 0;
-
-// int Left_Speaker;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -147,28 +140,30 @@ void setup() {
 
   pinMode(connectionLED, OUTPUT);
 
-  pinMode(l1Button, INPUT);
-  pinMode(l2Button, INPUT);
-  pinMode(l3Button, INPUT);
-  pinMode(l4Button, INPUT);
+  button1.attachClick(button1Clicked);
+  button1.setDebounceTicks(50);
+
+  button2.attachClick(button2Clicked);
+  button2.setDebounceTicks(50);
+
+  button3.attachClick(button3Clicked);
+  button3.setDebounceTicks(50);
+
+  button4.attachClick(button4Clicked);
+  button4.setDebounceTicks(50);
 
   pinMode(l1Relay, OUTPUT);
   pinMode(l2Relay, OUTPUT);
   pinMode(l3Relay, OUTPUT);
   pinMode(l4Relay, OUTPUT);
 
+  digitalWrite(l1Relay, false);
+  digitalWrite(l2Relay, false);
+  digitalWrite(l3Relay, false);
+  digitalWrite(l4Relay, false);
+
   startWifi();
   startMQTT();
-  startOTA();
-
-  digitalWrite(l1Relay, true);
-  digitalWrite(l2Relay, true);
-  digitalWrite(l3Relay, true);
-  digitalWrite(l4Relay, true);
-
-  digitalWrite(leftSpeaker, true);
-  delay(1000);
-  digitalWrite(leftSpeaker, false);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -185,44 +180,11 @@ void setup() {
 void loop() {
   handleWiFi();
   handleMQTT();
-  ArduinoOTA.handle();
 
-  buttonOneState = digitalRead(l1Button);
-  buttonTwoState = digitalRead(l2Button);
-  buttonThreeState = digitalRead(l3Button);
-  buttonFourState = digitalRead(l4Button);
-
-  // Button One
-  if (buttonOneState != lastButtonOneState) {
-    if (buttonOneState) {
-      buttonOnePressed();
-    }
-  }
-  lastButtonOneState = buttonOneState;
-
-  // Button Two
-  if (buttonTwoState != lastButtonTwoState) {
-    if (buttonTwoState) {
-      buttonTwoPressed();
-    }
-  }
-  lastButtonTwoState = buttonTwoState;
-
-  // Button Three
-  if (buttonThreeState != lastButtonThreeState) {
-    if (buttonThreeState) {
-      buttonThreePressed();
-    }
-  }
-  lastButtonThreeState = buttonThreeState;
-
-  // Button Four
-  if (buttonFourState != lastButtonFourState) {
-    if (buttonFourState) {
-      buttonFourPressed();
-    }
-  }
-  lastButtonFourState = buttonFourState;
+  button1.tick();
+  button2.tick();
+  button3.tick();
+  button4.tick();
 
   ///// Timed Events /////
   unsigned long currentMillis = millis();

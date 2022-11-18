@@ -54,10 +54,11 @@ void messageReceived(char* topic, byte* payload, unsigned int length) {
   printMessage(payload, length);
 
   if (payload[0] != '{') {
-    if ((char)payload[0] == '1')
+    if ((char)payload[0] == '1') {
       powerOnSequence();
-    else if ((char)payload[0] == '0')
+    } else if ((char)payload[0] == '0') {
       powerOffSequence();
+    }
   }
 
   else {
