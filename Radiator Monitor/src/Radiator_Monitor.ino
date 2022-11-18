@@ -10,13 +10,13 @@
 //
 ////////////////////////////////////////////////////////////////////////
 #include <ArduinoJson.h>  // Json
-#include <ArduinoOTA.h>   // OTA
 #include <DallasTemperature.h>
-#include <NTPClient.h>  // Time
+// #include <NTPClient.h>  // Time
+#include <ESP8266WiFi.h>  // WiFi
 #include <OneWire.h>
 #include <PubSubClient.h>  // MQTT
 #include <Streaming.h>     // Serial Printouts
-#include <String.h>
+// #include <String.h>
 #include <WiFiClient.h>  //
 
 ////////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@
 WiFiClient espClient;
 PubSubClient mqtt(espClient);
 
-OneWire oneWire(ONE_WIRE_BUS);
+OneWire oneWire(9);
 DallasTemperature sensors(&oneWire);
 
 DeviceAddress tempDeviceAddress;
@@ -71,10 +71,10 @@ DeviceAddress tempDeviceAddress;
 const char *wifiSsid = "I Don't Mind";
 const char *wifiPassword = "Have2Biscuits";
 
-const char *nodeName = "Radiator Monitor";  // change for different room
+const char *nodeName = "Living Room Radiator Monitor";  // change for different room
 const char *nodePassword = "crm0xhvsmn";
 
-const char *disconnectMsg = "Radiator Monitor Disconnected";
+const char *disconnectMsg = "Living Room Radiator Monitor Disconnected";
 
 const char *mqttServerIP = "mqtt.kavanet.io";
 
@@ -117,7 +117,6 @@ void setup() {
 
   startWifi();
   startMQTT();
-  startOTA();
 
   startSensors();
 }
@@ -136,7 +135,6 @@ void setup() {
 void loop(void) {
   handleWiFi();
   handleMQTT();
-  ArduinoOTA.handle();
 
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {

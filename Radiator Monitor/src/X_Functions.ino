@@ -54,52 +54,6 @@ void handleWiFi() {
 
 ////////////////////////////////////////////////////////////////////////
 //
-//  ####### #######    #
-//  #     #    #      # #
-//  #     #    #     #   #
-//  #     #    #    #     #
-//  #     #    #    #######
-//  #     #    #    #     #
-//  #######    #    #     #
-//
-////////////////////////////////////////////////////////////////////////
-void startOTA() {
-  ArduinoOTA.setHostname(nodeName);
-  ArduinoOTA.setPassword(nodePassword);
-
-  Serial << "| OTA Ready |" << endl;
-
-  ArduinoOTA.onStart([]() {
-    Serial << "Start OTA Upload" << endl;
-  });
-
-  ArduinoOTA.onEnd([]() {
-    Serial << "OTA Upload Finished" << endl;
-  });
-
-  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-    Serial << "Progress: " << progress / (total / 100) << "%" << endl;
-  });
-
-  ArduinoOTA.onError([](ota_error_t error) {
-    Serial.printf("Error[%u]: ", error);
-    if (error == OTA_AUTH_ERROR)
-      Serial << "Authentication Failed" << endl;
-    else if (error == OTA_BEGIN_ERROR)
-      Serial << "Begin Failed" << endl;
-    else if (error == OTA_CONNECT_ERROR)
-      Serial << "Connect Failed" << endl;
-    else if (error == OTA_RECEIVE_ERROR)
-      Serial << "Receive Failed" << endl;
-    else if (error == OTA_END_ERROR)
-      Serial << "End Failed" << endl;
-  });
-
-  ArduinoOTA.begin();
-}
-
-////////////////////////////////////////////////////////////////////////
-//
 //  #######
 //     #    # #    # ######
 //     #    # ##  ## #
@@ -109,13 +63,13 @@ void startOTA() {
 //     #    # #    # ######
 //
 ////////////////////////////////////////////////////////////////////////
-//void startTime()
+// void startTime()
 //{
-//  timeClient.begin();
-//  timeClient.update();
-//  timeClient.setTimeOffset(1); // Make this auto adjust for DST *NB*
-//  Serial << "| Time " << timeClient.getFormattedTime() << " |" << endl;
-//}
+//   timeClient.begin();
+//   timeClient.update();
+//   timeClient.setTimeOffset(1); // Make this auto adjust for DST *NB*
+//   Serial << "| Time " << timeClient.getFormattedTime() << " |" << endl;
+// }
 
 // int getTimestamp(long currentTime)
 // {
@@ -201,10 +155,10 @@ void printAddress(DeviceAddress deviceAddress) {
 //
 ////////////////////////////////////////////////////////////////////////
 float mapFloat(float val, float inMin, float inMax, float outMin, float outMax) {
-  // return (val - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+  return (val - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }
 
 float getTemperature() {
   // float temperature = ((float)((int)(sensor.readTempC() * 10))) / 10;
-  // return temperature;
+  return 0;
 }
