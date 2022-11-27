@@ -10,11 +10,10 @@
 //  ### #    #  ####  ######  ####  #####  ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-#include <ArduinoJson.h>  // Json Library
-#include <ArduinoOTA.h>   // OTA
-#include <OneButton.h>
+#include <ArduinoJson.h>   // Json Library
 #include <PubSubClient.h>  // MQTT
 #include <Streaming.h>     // Serial printouts
+#include <ESP8266WiFi.h>
 #include <WiFiClient.h>    // Wifi
 
 ////////////////////////////////////////////////////////////////////////
@@ -63,9 +62,6 @@
 // MQTT CLient
 WiFiClient espClient;
 PubSubClient mqtt(espClient);
-
-// Button
-OneButton button(buttonPin, true);
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -134,10 +130,6 @@ void setup() {
 
   startWifi();
   startMQTT();
-  // startOTA();
-
-  button.attachClick(click);
-  button.setDebounceTicks(50);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -154,7 +146,6 @@ void setup() {
 void loop() {
   handleWiFi();
   handleMQTT();
-  button.tick();
 
   updateCurrentMillis = millis();
   if (updateCurrentMillis - updatePreviousMillis >= 5 * 1000) {
