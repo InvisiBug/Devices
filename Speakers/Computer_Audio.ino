@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////
-//  Matthew Kavanagh 
-// 
-//  Kavanet 
+//  Matthew Kavanagh
+//
+//  Kavanet
 //  2019
 ////////////////////////////////////////////////////////////////////////
 // Relays
@@ -20,37 +20,37 @@
 
 ////////////////////////////////////////////////////////////////////////
 //
-//  ###                                                  
-//   #  #    #  ####  #      #    # #####  ######  ####  
-//   #  ##   # #    # #      #    # #    # #      #      
-//   #  # #  # #      #      #    # #    # #####   ####  
-//   #  #  # # #      #      #    # #    # #           # 
-//   #  #   ## #    # #      #    # #    # #      #    # 
-//  ### #    #  ####  ######  ####  #####  ######  ####  
+//  ###
+//   #  #    #  ####  #      #    # #####  ######  ####
+//   #  ##   # #    # #      #    # #    # #      #
+//   #  # #  # #      #      #    # #    # #####   ####
+//   #  #  # # #      #      #    # #    # #           #
+//   #  #   ## #    # #      #    # #    # #      #    #
+//  ### #    #  ####  ######  ####  #####  ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-#include <PubSubClient.h> // MQTT
-#include <ArduinoJson.h>  // Json Library
-#include <ESP8266WiFi.h>  // WiFi
-#include <ArduinoOTA.h>   // OTA
-#include <WiFiClient.h>   // May not be needed
-#include <Streaming.h>    // Serial Printouts
-#include <string.h>       // Used for node disconnect message
+#include <ArduinoJson.h>   // Json Library
+#include <ArduinoOTA.h>    // OTA
+#include <ESP8266WiFi.h>   // WiFi
+#include <PubSubClient.h>  // MQTT
+#include <Streaming.h>     // Serial Printouts
+#include <WiFiClient.h>    // May not be needed
+#include <string.h>        // Used for node disconnect message
 
 ////////////////////////////////////////////////////////////////////////
 //
-//  ######                                                        
-//  #     # ###### ###### # #    # # ##### #  ####  #    #  ####  
-//  #     # #      #      # ##   # #   #   # #    # ##   # #      
-//  #     # #####  #####  # # #  # #   #   # #    # # #  #  ####  
-//  #     # #      #      # #  # # #   #   # #    # #  # #      # 
-//  #     # #      #      # #   ## #   #   # #    # #   ## #    # 
-//  ######  ###### #      # #    # #   #   #  ####  #    #  #### 
+//  ######
+//  #     # ###### ###### # #    # # ##### #  ####  #    #  ####
+//  #     # #      #      # ##   # #   #   # #    # ##   # #
+//  #     # #####  #####  # # #  # #   #   # #    # # #  #  ####
+//  #     # #      #      # #  # # #   #   # #    # #  # #      #
+//  #     # #      #      # #   ## #   #   # #    # #   ## #    #
+//  ######  ###### #      # #    # #   #   #  ####  #    #  ####
 //
 ////////////////////////////////////////////////////////////////////////
-#define connectionLED   13
+#define connectionLED 13
 
-#define ON  LOW // Need to check these *NB*
+#define ON LOW  // Need to check these *NB*
 #define OFF HIGH
 
 #define l1Relay 12
@@ -63,21 +63,21 @@
 #define l3Button 10
 #define l4Button 14
 
-#define leftSpeaker  l4Relay
+#define leftSpeaker l4Relay
 #define rightSpeaker l3Relay
-#define sub          l2Relay
-#define mixer        l1Relay
+#define sub l2Relay
+#define mixer l1Relay
 
 #define mqttLen 50  // Buffer for non JSON MQTT comms
 
 ////////////////////////////////////////////////////////////////////////
 //
-//  #     #                                                  
-//  #     #   ##   #####  #####  #    #   ##   #####  ###### 
-//  #     #  #  #  #    # #    # #    #  #  #  #    # #      
-//  ####### #    # #    # #    # #    # #    # #    # #####  
-//  #     # ###### #####  #    # # ## # ###### #####  #      
-//  #     # #    # #   #  #    # ##  ## #    # #   #  #      
+//  #     #
+//  #     #   ##   #####  #####  #    #   ##   #####  ######
+//  #     #  #  #  #    # #    # #    #  #  #  #    # #
+//  ####### #    # #    # #    # #    # #    # #    # #####
+//  #     # ###### #####  #    # # ## # ###### #####  #
+//  #     # #    # #   #  #    # ##  ## #    # #   #  #
 //  #     # #    # #    # #####  #    # #    # #    # ######
 //
 ////////////////////////////////////////////////////////////////////////
@@ -87,29 +87,29 @@ PubSubClient mqtt(espClient);
 
 ////////////////////////////////////////////////////////////////////////
 //
-//  #     #                                                    
-//  #     #   ##   #####  #   ##   #####  #      ######  ####  
-//  #     #  #  #  #    # #  #  #  #    # #      #      #      
-//  #     # #    # #    # # #    # #####  #      #####   ####  
-//   #   #  ###### #####  # ###### #    # #      #           # 
-//    # #   #    # #   #  # #    # #    # #      #      #    # 
-//     #    #    # #    # # #    # #####  ###### ######  #### 
+//  #     #
+//  #     #   ##   #####  #   ##   #####  #      ######  ####
+//  #     #  #  #  #    # #  #  #  #    # #      #      #
+//  #     # #    # #    # # #    # #####  #      #####   ####
+//   #   #  ###### #####  # ###### #    # #      #           #
+//    # #   #    # #   #  # #    # #    # #      #      #    #
+//     #    #    # #    # # #    # #####  ###### ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-char* wifiSsid      = "I Don't Mind";
-char* wifiPassword  = "Have2Biscuits";
+char* wifiSsid = "I Don't Mind";
+char* wifiPassword = "Have2Biscuits";
 
-char* nodeName      = "Computer Audio";
+char* nodeName = "Computer Audio";
 char* disconnectMsg = "Computer Audio Disconnected";
-char* nodePassword  = "crm0xhvsmn";
+char* nodePassword = "crm0xhvsmn";
 
-char* controlTopic  = "Computer Audio Control";
+char* controlTopic = "Computer Audio Control";
 
-char* mqttServerIP = "192.168.1.46";
+char* mqttServerIP = "mqtt.kavanet.io";
 
 bool WiFiConnected = false;
 
-char msg[mqttLen]; // Buffer to store the MQTT messages
+char msg[mqttLen];  // Buffer to store the MQTT messages
 
 bool buttonOneState;
 bool buttonTwoState;
@@ -121,7 +121,7 @@ bool lastButtonTwoState;
 bool lastButtonThreeState;
 bool lastButtonFourState;
 
-long interval = (5 * 1000); // Update every 5 seconds
+long interval = (5 * 1000);  // Update every 5 seconds
 unsigned long previousMillis = 0;
 
 long connectionTimeout = (2 * 1000);
@@ -130,17 +130,16 @@ long lastMQTTReconnectAttempt = 0;
 
 ////////////////////////////////////////////////////////////////////////
 //
-//  ######                                                #####                                          
-//  #     # #####   ####   ####  #####    ##   #    #    #     # #####   ##   #####  ##### #    # #####  
-//  #     # #    # #    # #    # #    #  #  #  ##  ##    #         #    #  #  #    #   #   #    # #    # 
-//  ######  #    # #    # #      #    # #    # # ## #     #####    #   #    # #    #   #   #    # #    # 
-//  #       #####  #    # #  ### #####  ###### #    #          #   #   ###### #####    #   #    # #####  
-//  #       #   #  #    # #    # #   #  #    # #    #    #     #   #   #    # #   #    #   #    # #      
-//  #       #    #  ####   ####  #    # #    # #    #     #####    #   #    # #    #   #    ####  #      
+//  ######                                                #####
+//  #     # #####   ####   ####  #####    ##   #    #    #     # #####   ##   #####  ##### #    # #####
+//  #     # #    # #    # #    # #    #  #  #  ##  ##    #         #    #  #  #    #   #   #    # #    #
+//  ######  #    # #    # #      #    # #    # # ## #     #####    #   #    # #    #   #   #    # #    #
+//  #       #####  #    # #  ### #####  ###### #    #          #   #   ###### #####    #   #    # #####
+//  #       #   #  #    # #    # #   #  #    # #    #    #     #   #   #    # #   #    #   #    # #
+//  #       #    #  ####   ####  #    # #    # #    #     #####    #   #    # #    #   #    ####  #
 //
 ////////////////////////////////////////////////////////////////////////
-void setup()
-{
+void setup() {
   Serial.begin(115200);
   Serial << "\n| " << nodeName << " |" << endl;
 
@@ -154,7 +153,7 @@ void setup()
   pinMode(l1Relay, OUTPUT);
   pinMode(l2Relay, OUTPUT);
   pinMode(l3Relay, OUTPUT);
-  pinMode(l4Relay, OUTPUT); 
+  pinMode(l4Relay, OUTPUT);
 
   startWifi();
   startMQTT();
@@ -169,75 +168,64 @@ void setup()
   delay(1000);
   digitalWrite(leftSpeaker, false);
 }
- 
+
 ///////////////////////////////////////////////////////////////////////
 //
-//  #     #                    ######                                            
-//  ##   ##   ##   # #    #    #     # #####   ####   ####  #####    ##   #    # 
-//  # # # #  #  #  # ##   #    #     # #    # #    # #    # #    #  #  #  ##  ## 
-//  #  #  # #    # # # #  #    ######  #    # #    # #      #    # #    # # ## # 
-//  #     # ###### # #  # #    #       #####  #    # #  ### #####  ###### #    # 
-//  #     # #    # # #   ##    #       #   #  #    # #    # #   #  #    # #    # 
-//  #     # #    # # #    #    #       #    #  ####   ####  #    # #    # #    # 
+//  #     #                    ######
+//  ##   ##   ##   # #    #    #     # #####   ####   ####  #####    ##   #    #
+//  # # # #  #  #  # ##   #    #     # #    # #    # #    # #    #  #  #  ##  ##
+//  #  #  # #    # # # #  #    ######  #    # #    # #      #    # #    # # ## #
+//  #     # ###### # #  # #    #       #####  #    # #  ### #####  ###### #    #
+//  #     # #    # # #   ##    #       #   #  #    # #    # #   #  #    # #    #
+//  #     # #    # # #    #    #       #    #  ####   ####  #    # #    # #    #
 //
 ///////////////////////////////////////////////////////////////////////
-void loop()
-{
+void loop() {
   handleWiFi();
-  handleMQTT();  
+  handleMQTT();
   ArduinoOTA.handle();
 
-
-  buttonOneState   = digitalRead(l1Button);
-  buttonTwoState   = digitalRead(l2Button);
+  buttonOneState = digitalRead(l1Button);
+  buttonTwoState = digitalRead(l2Button);
   buttonThreeState = digitalRead(l3Button);
-  buttonFourState  = digitalRead(l4Button);
- 
+  buttonFourState = digitalRead(l4Button);
+
   // Button One
-  if(buttonOneState != lastButtonOneState) 
-  {
-    if(buttonOneState) 
-    { 
+  if (buttonOneState != lastButtonOneState) {
+    if (buttonOneState) {
       buttonOnePressed();
     }
   }
   lastButtonOneState = buttonOneState;
 
   // Button Two
-  if(buttonTwoState != lastButtonTwoState) 
-  {
-    if(buttonTwoState) 
-    { 
+  if (buttonTwoState != lastButtonTwoState) {
+    if (buttonTwoState) {
       buttonTwoPressed();
     }
   }
   lastButtonTwoState = buttonTwoState;
 
   // Button Three
-  if(buttonThreeState != lastButtonThreeState)
-  {
-    if(buttonThreeState) 
-    {  
+  if (buttonThreeState != lastButtonThreeState) {
+    if (buttonThreeState) {
       buttonThreePressed();
     }
   }
   lastButtonThreeState = buttonThreeState;
 
   // Button Four
-  if(buttonFourState != lastButtonFourState) 
-  {
-    if(buttonFourState) 
-    { 
+  if (buttonFourState != lastButtonFourState) {
+    if (buttonFourState) {
       buttonFourPressed();
     }
   }
   lastButtonFourState = buttonFourState;
 
-
   ///// Timed Events /////
   unsigned long currentMillis = millis();
 
-  if(currentMillis - previousMillis >= interval) // 5 second update cycle
+  if (currentMillis - previousMillis >= interval)  // 5 second update cycle
   {
     previousMillis = currentMillis;
     publishAll();
