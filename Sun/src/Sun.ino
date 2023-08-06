@@ -20,8 +20,8 @@
 //  ### #    #  ####  ######  ####  #####  ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-#include <ArduinoJson.h>   // Json Library
-#include <ArduinoOTA.h>    // OTA
+#include <ArduinoJson.h>  // Json Library
+// #include <ArduinoOTA.h>    // OTA
 #include <ESP8266WiFi.h>   // WiFi
 #include <PubSubClient.h>  // MQTT
 #include <Streaming.h>     // Serial Printouts
@@ -84,7 +84,7 @@ const char *nodePassword = "crm0xhvsmn";
 
 const char *disconnectMsg = "Sun Disconnected";
 const char *controlTopic = "Sun Control";
-const char *mqttServerIP = "192.168.1.46";
+const char *mqttServerIP = "mqtt.kavanet.io";
 
 // const char* mqttServerIP = "broker.mqttdashboard.com";  // Use this one for testing without local broker
 
@@ -126,7 +126,7 @@ void setup() {
 
   startWifi();
   startMQTT();
-  startOTA();
+  // startOTA();
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -143,7 +143,7 @@ void setup() {
 void loop() {
   handleMQTT();
   handleWiFi();
-  ArduinoOTA.handle();
+  // ArduinoOTA.handle();
 
   // Serial << digitalRead(buttonPin) << endl;
 

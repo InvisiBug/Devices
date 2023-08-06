@@ -80,11 +80,11 @@ OneButton button(buttonPin, true);
 const char* wifiSsid = "I Don't Mind";
 const char* wifiPassword = "Have2Biscuits";
 
-const char* nodeName = "Floodlight";
+const char* nodeName = "Rock";
 const char* nodePassword = "crm0xhvsmn";
 
-const char* disconnectMsg = "Floodlight Disconnected";
-const char* controlTopic = "Floodlight Control";
+const char* disconnectMsg = "Rock Disconnected";
+const char* controlTopic = "Rock Control";
 const char* mqttServerIP = "mqtt.kavanet.io";
 
 bool WiFiConnected = false;
