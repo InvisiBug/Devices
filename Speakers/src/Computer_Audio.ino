@@ -30,7 +30,6 @@
 //
 ////////////////////////////////////////////////////////////////////////
 #include <ArduinoJson.h>   // Json Library
-#include <ArduinoOTA.h>    // OTA
 #include <ESP8266WiFi.h>   // WiFi
 #include <PubSubClient.h>  // MQTT
 #include <Streaming.h>     // Serial Printouts
@@ -157,18 +156,17 @@ void setup() {
 
   startWifi();
   startMQTT();
-  startOTA();
-
-  digitalWrite(l1Relay, true);
-  digitalWrite(l2Relay, true);
-  digitalWrite(l3Relay, true);
-  digitalWrite(l4Relay, true);
 
   digitalWrite(leftSpeaker, true);
-  delay(1000);
-  digitalWrite(leftSpeaker, false);
-}
+  digitalWrite(rightSpeaker, true);
+  digitalWrite(sub, true);
+  digitalWrite(mixer, true);
 
+  // digitalWrite(leftSpeaker, true);
+  // delay(1000);
+  // digitalWrite(leftSpeaker, false);
+}
+// Mess With The Crabb0
 ///////////////////////////////////////////////////////////////////////
 //
 //  #     #                    ######
@@ -183,7 +181,6 @@ void setup() {
 void loop() {
   handleWiFi();
   handleMQTT();
-  ArduinoOTA.handle();
 
   buttonOneState = digitalRead(l1Button);
   buttonTwoState = digitalRead(l2Button);
