@@ -91,10 +91,13 @@ void publishSensors() {
 
   StaticJsonDocument<128> doc;
 
+  scanSensor();
+
   doc["node"] = nodeName;
-  doc["temperature"] = getTemperature();
-  doc["humidity"] = ((float)((int)(sensor.readFloatHumidity() * 10))) / 10;
-  doc["pressure"] = round(sensor.readFloatPressure() * 100) / 100;
+  // doc["temperature"] = ((float)((int)(cTemp * 10))) / 10;
+  doc["temperature"] = round(cTemp * 10) / 10;
+  doc["humidity"] = ((float)((int)(humidity * 10))) / 10;
+  doc["pressure"] = round(humidity * 100) / 100;
 
   char buffer[128];
   size_t n = serializeJson(doc, buffer);
