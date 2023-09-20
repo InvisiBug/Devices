@@ -44,11 +44,6 @@ void handleWiFi() {
     Serial << endl;
     Serial << "| Connected to " << wifiSsid << " |" << endl;
     Serial << "| IP address : " << WiFi.localIP() << " |" << endl;
-
-    // if (sensor.beginI2C() == false)  // Begin communication over I2C
-    // {
-    //   Serial.println("The sensor did not respond. Please check wiring.");
-    // }
   }
 }
 
@@ -63,33 +58,6 @@ void handleWiFi() {
 //  #####  ###### #    #  ####   ####  #    #  ####
 //
 ////////////////////////////////////////////////////////////////////////
-// void startSensors() {
-
-//
-//   if (sensor.beginI2C() == false) {  // Begin communication over I2C
-//     Serial.println("The sensor did not respond. Please check wiring.");
-//   }
-// }
-
-////////////////////////////////////////////////////////////////////////
-//
-//  #####                                      ######
-// #     # #   #  ####  ##### ###### #    #    #     #   ##   #####   ##
-// #        # #  #        #   #      ##  ##    #     #  #  #    #    #  #
-//  #####    #    ####    #   #####  # ## #    #     # #    #   #   #    #
-//       #   #        #   #   #      #    #    #     # ######   #   ######
-// #     #   #   #    #   #   #      #    #    #     # #    #   #   #    #
-//  #####    #    ####    #   ###### #    #    ######  #    #   #   #    #
-//
-////////////////////////////////////////////////////////////////////////
-// float mapFloat(float val, float inMin, float inMax, float outMin, float outMax) {
-//   return (val - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
-// }
-
-// float getTemperature() {
-//   float temperature = ((float)((int)(sensor.readTempC() * 10))) / 10;
-//   return temperature;
-// }
 
 void scanSensor() {
   unsigned int b1[24];

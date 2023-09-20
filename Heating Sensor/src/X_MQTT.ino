@@ -86,15 +86,11 @@ void subscribeToTopics() {
 //
 ////////////////////////////////////////////////////////////////////////
 void publishSensors() {
-  // const size_t capacity = JSON_OBJECT_SIZE(7);  // This should only be 3 not 6, think its a bug
-  // DynamicJsonDocument doc(capacity);
-
   StaticJsonDocument<128> doc;
 
   scanSensor();
 
   doc["node"] = nodeName;
-  // doc["temperature"] = ((float)((int)(cTemp * 10))) / 10;
   doc["temperature"] = round(cTemp * 10) / 10;
   doc["humidity"] = ((float)((int)(humidity * 10))) / 10;
   doc["pressure"] = round(humidity * 100) / 100;

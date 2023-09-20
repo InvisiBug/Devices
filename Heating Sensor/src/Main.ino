@@ -93,7 +93,6 @@ long connectionTimeout = (2 * 1000);
 long lastWiFiReconnectAttempt = 0;
 long lastMQTTReconnectAttempt = 0;
 
-// float temperature, humidity, pressure;
 double cTemp, fTemp, pressure, humidity;
 
 ////////////////////////////////////////////////////////////////////////
@@ -113,6 +112,8 @@ void setup() {
 
   pinMode(connectionLED, OUTPUT);
   Wire.begin();
+
+  //* Some sensors have their power tied to an IO pin
   pinMode(D6, OUTPUT);
   digitalWrite(D6, HIGH);
 
@@ -138,19 +139,6 @@ void loop(void) {
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
-    // scanSensor();
-    // Serial.print("Temperature in Celsius : ");
-    // Serial.print(cTemp);
-    // Serial.println(" C");
-    // Serial.print("Temperature in Fahrenheit : ");
-    // Serial.print(fTemp);
-    // Serial.println(" F");
-    // Serial.print("Pressure : ");
-    // Serial.print(pressure);
-    // Serial.println(" hPa");
-    // Serial.print("Relative Humidity : ");
-    // Serial.print(humidity);
-    // Serial.println(" RH");
 
     if (WiFiConnected) {
       publishSensors();
