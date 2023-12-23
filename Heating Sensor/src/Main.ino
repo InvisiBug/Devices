@@ -77,10 +77,10 @@ PubSubClient mqtt(espClient);
 const char *wifiSsid = "I Don't Mind";
 const char *wifiPassword = "Have2Biscuits";
 
-const char *nodeName = "Study Sensor";  // change for different room
+const char *nodeName = "Bedroom Sensor";  // change for different room
 const char *nodePassword = "crm0xhvsmn";
 
-const char *disconnectMsg = "Study Sensor Disconnected";
+const char *disconnectMsg = "Bedroom Sensor Disconnected";
 
 const char *mqttServerIP = "mqtt.kavanet.io";
 

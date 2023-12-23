@@ -21,39 +21,33 @@ void handleMQTT() {
       if (now - lastMQTTReconnectAttempt > connectionTimeout) {
         lastMQTTReconnectAttempt = now;
 
-        if (mqtt.connect(nodeName, nodeName, 1, 0, disconnectMsg))  // Attempt to connect using a login
-        {
-          Serial << "| MQTT connection established |" << endl;  // Dont publish here, causes crashes
+        if (mqtt.connect(nodeName, nodeName, 1, 0, disconnectMsg)) {  // Attempt to connect using a login
+          // Serial << "| MQTT connection established |" << endl;        // Dont publish here, causes crashes
           subscribeToTopics();
-        }
-
-        else  // Not connected
-        {
-          Serial << "| MQTT connection failed, rc=" << mqtt.state() << " Trying again |" << endl;
-
+          digitalWrite(connectionLED, OFF);
+        } else {  // Not connected
+          // Serial << "| MQTT connection failed, rc=" << mqtt.state() << " Trying again |" << endl;
+          digitalWrite(connectionLED, ON);
           delay(250);
+          digitalWrite(connectionLED, OFF);
         }
       }
-    }
-
-    else  // Connected
-    {
+    } else {  // Connected
       mqtt.loop();
     }
   }
 }
 
 void messageReceived(char* topic, byte* payload, unsigned int length) {
-  StaticJsonDocument<256> doc;
-  deserializeJson(doc, payload, length);
-
-  red = map(doc["red"], 0, 255, 0, 1024);
-  green = map(doc["green"], 0, 255, 0, 1024);
-  blue = map(doc["blue"], 0, 255, 0, 1024);
-
-  publishAll();
-
-  Serial << "Red :" << red << " Green :" << green << " Blue: " << blue << endl;
+  if (!strcmp(topic, controlTopic)) {
+    if ((char)payload[0] == 'T') {
+      changeRelayState();
+    } else if ((char)payload[0] == '1') {
+      relayOn();
+    } else if ((char)payload[0] == '0') {
+      relayOff();
+    }
+  }
 }
 
 void printMessage(byte* payload, int length) {
@@ -80,26 +74,23 @@ void subscribeToTopics() {
 
 ////////////////////////////////////////////////////////////////////////
 //
-//  ######
-//  #     # #    # #####  #      #  ####  #    #
-//  #     # #    # #    # #      # #      #    #
-//  ######  #    # #####  #      #  ####  ######
-//  #       #    # #    # #      #      # #    #
-//  #       #    # #    # #      # #    # #    #
-//  #        ####  #####  ###### #  ####  #    #
+// ######
+// #     # #    # #####  #      #  ####  #    #
+// #     # #    # #    # #      # #      #    #
+// ######  #    # #####  #      #  ####  ######
+// #       #    # #    # #      #      # #    #
+// #       #    # #    # #      # #    # #    #
+// #        ####  #####  ###### #  ####  #    #
 //
 ////////////////////////////////////////////////////////////////////////
-void publishAll()  // Send signal through as 6a value and process on the other end
-{
+void publishAll() {
   // Serial << "Sending MQTT Data" << endl;
 
   const size_t capacity = JSON_OBJECT_SIZE(4);
   DynamicJsonDocument doc(capacity);
 
-  doc["Node"] = nodeName;
-  doc["red"] = map(red, 0, 1024, 0, 255);
-  doc["green"] = map(green, 0, 1024, 0, 255);
-  doc["blue"] = map(blue, 0, 1024, 0, 255);
+  doc["node"] = nodeName;
+  doc["state"] = relayState;
 
   char buffer[512];
 

@@ -11,8 +11,7 @@
 //
 ////////////////////////////////////////////////////////////////////////
 #include <ArduinoJson.h>  // Json Library
-#include <ESP8266WiFi.h>  // WiFi
-#include <OneButton.h>
+#include <ESP8266WiFi.h>
 #include <PubSubClient.h>  // MQTT
 #include <Streaming.h>     // Serial printouts
 #include <WiFiClient.h>    // Wifi
@@ -30,8 +29,13 @@
 ////////////////////////////////////////////////////////////////////////
 // Physical I/O
 #define connectionLED 13
-#define relayPin 12
+#define relay1Pin 12
+#define relay2Pin 5
 #define buttonPin 0
+
+#define onPin D1
+#define offPin D5
+
 // // I/O Logic
 #define ON LOW
 #define OFF HIGH
@@ -63,9 +67,6 @@
 WiFiClient espClient;
 PubSubClient mqtt(espClient);
 
-// Button
-OneButton button(buttonPin, true);
-
 ////////////////////////////////////////////////////////////////////////
 //
 //  #     #
@@ -80,11 +81,11 @@ OneButton button(buttonPin, true);
 const char* wifiSsid = "I Don't Mind";
 const char* wifiPassword = "Have2Biscuits";
 
-const char* nodeName = "Sun";
+const char* nodeName = "Heating";
 const char* nodePassword = "crm0xhvsmn";
 
-const char* disconnectMsg = "Sun Disconnected";
-const char* controlTopic = "Sun Control";
+const char* disconnectMsg = "Heating Disconnected";
+const char* controlTopic = "Heating Control";
 const char* mqttServerIP = "mqtt.kavanet.io";
 
 bool WiFiConnected = false;
@@ -120,21 +121,25 @@ bool lastButtonState = false;
 ////////////////////////////////////////////////////////////////////////
 void setup() {
   Serial.begin(115200);
-  Serial << "\n|** " << nodeName << " **|" << endl;
+  // Serial << "\n|** " << nodeName << " **|" << endl;
 
   pinMode(connectionLED, OUTPUT);
 
-  pinMode(relayPin, OUTPUT);
+  pinMode(relay1Pin, OUTPUT);
+  pinMode(relay2Pin, OUTPUT);
   pinMode(buttonPin, INPUT);
 
-  digitalWrite(relayPin, false);
+  pinMode(onPin, OUTPUT);
+  pinMode(offPin, OUTPUT);
+
+  digitalWrite(onPin, false);
+  digitalWrite(offPin, false);
+
+  digitalWrite(relay1Pin, false);
+  digitalWrite(relay2Pin, false);
 
   startWifi();
   startMQTT();
-  // startOTA();
-
-  button.attachClick(click);
-  button.setDebounceTicks(50);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -151,7 +156,6 @@ void setup() {
 void loop() {
   handleWiFi();
   handleMQTT();
-  button.tick();
 
   updateCurrentMillis = millis();
   if (updateCurrentMillis - updatePreviousMillis >= 5 * 1000) {

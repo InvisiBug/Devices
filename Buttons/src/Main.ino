@@ -107,7 +107,7 @@ bool audioOff = false;
 bool floodlightOff = false;
 bool computerOff = false;
 bool screenLEDsOff = false;
-bool sunOff = false;
+bool eggChair = false;
 
 int deskLEDsRed;
 int deskLEDsGreen;

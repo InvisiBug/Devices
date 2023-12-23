@@ -88,11 +88,11 @@ DallasTemperature sensors(&oneWire);
 const char* wifiSsid = "I Don't Mind";
 const char* wifiPassword = "Have2Biscuits";
 
-const char* nodeName = "Living Room Radiator";
+const char* nodeName = "Study Radiator";
 const char* nodePassword = "crm0xhvsmn";
 
-const char* disconnectMsg = "Living Room Radiator Disconnected";
-const char* controlTopic = "Living Room Radiator Control";
+const char* disconnectMsg = "Study Radiator Disconnected";
+const char* controlTopic = "Study Radiator Control";
 const char* mqttServerIP = "mqtt.kavanet.io";
 
 bool WiFiConnected = false;

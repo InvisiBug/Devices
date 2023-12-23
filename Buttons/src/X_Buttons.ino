@@ -127,13 +127,13 @@ void button3Held() {
 //
 ///////////////////////////////////////////////////////////////////////
 void button4Clicked() {
-  Serial << "Sun" << endl;
-  if (sunOff) {
-    snprintf(msg, mqttLen, "%c %s", '1', "Sun Control");
-    mqtt.publish("Sun Control", msg);
+  Serial << "Egg Chair" << endl;
+  if (eggChair) {
+    snprintf(msg, mqttLen, "%c %s", '1', "Egg Chair Control");
+    mqtt.publish("Egg Chair Control", msg);
   } else {
-    snprintf(msg, mqttLen, "%c %s", '0', "Sun Control");
-    mqtt.publish("Sun Control", msg);
+    snprintf(msg, mqttLen, "%c %s", '0', "Egg Chair Control");
+    mqtt.publish("Egg Chair Control", msg);
   }
 }
 
@@ -151,13 +151,13 @@ void button4Held() {
 //
 ///////////////////////////////////////////////////////////////////////
 void button5Clicked() {
-  Serial << "Lamp" << endl;
-  if (lampOff) {
-    snprintf(msg, mqttLen, "%c %s", '1', "Lamp Control");
-    mqtt.publish("Lamp Control", msg);
+  Serial << "Floodlight" << endl;
+  if (floodlightOff) {
+    snprintf(msg, mqttLen, "%c %s", '1', "Floodlight Control");
+    mqtt.publish("Floodlight Control", msg);
   } else {
-    snprintf(msg, mqttLen, "%c %s", '0', "Lamp Control");
-    mqtt.publish("Lamp Control", msg);
+    snprintf(msg, mqttLen, "%c %s", '0', "Floodlight Control");
+    mqtt.publish("Floodlight Control", msg);
   }
 }
 
@@ -175,13 +175,13 @@ void button5Held() {
 //
 ///////////////////////////////////////////////////////////////////////
 void button6Clicked() {
-  Serial << "Floodlight" << endl;
-  if (floodlightOff) {
-    snprintf(msg, mqttLen, "%c %s", '1', "Floodlight Control");
-    mqtt.publish("Floodlight Control", msg);
+  Serial << "Lamp" << endl;
+  if (lampOff) {
+    snprintf(msg, mqttLen, "%c %s", '1', "Lamp Control");
+    mqtt.publish("Lamp Control", msg);
   } else {
-    snprintf(msg, mqttLen, "%c %s", '0', "Floodlight Control");
-    mqtt.publish("Floodlight Control", msg);
+    snprintf(msg, mqttLen, "%c %s", '0', "Lamp Control");
+    mqtt.publish("Lamp Control", msg);
   }
 }
 

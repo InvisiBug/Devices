@@ -77,18 +77,18 @@ void messageReceived(char* topic, byte* payload, unsigned int length) {
     // Serial << "Plug: " << !floodlightOff << endl;
   }
 
-  if (!strcmp(topic, "Sun")) {
+  if (!strcmp(topic, "Egg Chair")) {
     StaticJsonDocument<256> doc;
     deserializeJson(doc, payload, length);
     // Serial << doc["state"] << endl;
 
     if (doc["state"] == false) {
-      sunOff = true;
+      eggChair = true;
     } else {
-      sunOff = false;
+      eggChair = false;
     }
 
-    // Serial << "Sun: " << !sunOff << endl;
+    // Serial << "Sun: " << !eggChair << endl;
   }
 
   if (!strcmp(topic, "Lamp")) {

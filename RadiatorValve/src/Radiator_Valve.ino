@@ -85,13 +85,13 @@ OneButton button(buttonPin, true);
 const char* wifiSsid = "I Don't Mind";
 const char* wifiPassword = "Have2Biscuits";
 
-const char* nodeName = "Liams Desk Light";
+const char* nodeName = "Bedroom Valve";
 const char* nodePassword = "Kavanet";
 
-const char* disconnectMsg = "Liams Desk Light Disconnected";
-const char* controlTopic = "Liams Desk Light Control";
-const char* buttonTopic = "Liams Desk Light Button";
-const char* mqttServerIP = "192.168.1.46";
+const char* disconnectMsg = "Bedroom Valve Disconnected";
+const char* controlTopic = "Bedroom Valve Control";
+const char* buttonTopic = "Bedroom Valve Button";
+const char* mqttServerIP = "mqtt.kavanet.io";
 
 bool WiFiConnected = false;
 
