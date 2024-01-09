@@ -77,24 +77,21 @@ void messageReceived(char* topic, byte* payload, unsigned int length) {
     // Serial << "Plug: " << !floodlightOff << endl;
   }
 
-  if (!strcmp(topic, "Egg Chair")) {
+  if (!strcmp(topic, "zigbee2mqtt/eggChair")) {
     StaticJsonDocument<256> doc;
     deserializeJson(doc, payload, length);
-    // Serial << doc["state"] << endl;
 
-    if (doc["state"] == false) {
+    if (doc["state"] == "ON") {
       eggChair = true;
-    } else {
+    } else if (doc["state"] == "OFF") {
+
       eggChair = false;
     }
-
-    // Serial << "Sun: " << !eggChair << endl;
   }
 
   if (!strcmp(topic, "Lamp")) {
     StaticJsonDocument<256> doc;
     deserializeJson(doc, payload, length);
-    // Serial << doc["state"] << endl;
 
     if (doc["state"] == false) {
       lampOff = true;

@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////
 #include <ArduinoJson.h>  // Json Library
-#include <ArduinoOTA.h>   // OTA
 #include <ESP8266WiFi.h>  // WiFi
 #include <OneButton.h>
 #include <PubSubClient.h>  // MQTT
@@ -144,7 +143,6 @@ void setup() {
 
   startWifi();
   startMQTT();
-  startOTA();
 
   button1.attachClick(button1Clicked);
   button1.setDebounceTicks(50);
@@ -196,7 +194,6 @@ void setup() {
 void loop() {
   handleWiFi();
   handleMQTT();
-  ArduinoOTA.handle();
 
   button1.tick();
   button2.tick();

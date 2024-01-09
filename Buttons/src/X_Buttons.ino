@@ -129,11 +129,11 @@ void button3Held() {
 void button4Clicked() {
   Serial << "Egg Chair" << endl;
   if (eggChair) {
-    snprintf(msg, mqttLen, "%c %s", '1', "Egg Chair Control");
-    mqtt.publish("Egg Chair Control", msg);
+    snprintf(msg, mqttLen, "%s", "{\"state\":\"off\"}");
+    mqtt.publish("zigbee2mqtt/eggChair/set", msg);
   } else {
-    snprintf(msg, mqttLen, "%c %s", '0', "Egg Chair Control");
-    mqtt.publish("Egg Chair Control", msg);
+    snprintf(msg, mqttLen, "%s", "{\"state\":\"on\"}");
+    mqtt.publish("zigbee2mqtt/eggChair/set", msg);
   }
 }
 
