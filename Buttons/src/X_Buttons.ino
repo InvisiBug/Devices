@@ -177,11 +177,11 @@ void button5Held() {
 void button6Clicked() {
   Serial << "Lamp" << endl;
   if (lampOff) {
-    snprintf(msg, mqttLen, "%c %s", '1', "Lamp Control");
-    mqtt.publish("Lamp Control", msg);
+    snprintf(msg, mqttLen, "%c %s", '1', "Study Lamp Control");
+    mqtt.publish("Study Lamp Control", msg);
   } else {
-    snprintf(msg, mqttLen, "%c %s", '0', "Lamp Control");
-    mqtt.publish("Lamp Control", msg);
+    snprintf(msg, mqttLen, "%c %s", '0', "Study Lamp Control");
+    mqtt.publish("Study Lamp Control", msg);
   }
 }
 

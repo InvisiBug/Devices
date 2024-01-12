@@ -84,12 +84,11 @@ void messageReceived(char* topic, byte* payload, unsigned int length) {
     if (doc["state"] == "ON") {
       eggChair = true;
     } else if (doc["state"] == "OFF") {
-
       eggChair = false;
     }
   }
 
-  if (!strcmp(topic, "Lamp")) {
+  if (!strcmp(topic, "Study Lamp")) {
     StaticJsonDocument<256> doc;
     deserializeJson(doc, payload, length);
 
