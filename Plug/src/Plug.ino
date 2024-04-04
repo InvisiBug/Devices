@@ -80,11 +80,11 @@ OneButton button(buttonPin, true);
 const char* wifiSsid = "I Don't Mind";
 const char* wifiPassword = "Have2Biscuits";
 
-const char* nodeName = "Bed Room Valve";
+const char* nodeName = "Bed Room Lamp";
 const char* nodePassword = "crm0xhvsmn";
 
-const char* disconnectMsg = "Bed Room Valve Disconnected";
-const char* controlTopic = "Bed Room Valve Control";
+const char* disconnectMsg = "Bed Room Lamp Disconnected";
+const char* controlTopic = "Bed Room Lamp Control";
 const char* mqttServerIP = "mqtt.kavanet.io";
 
 bool WiFiConnected = false;
