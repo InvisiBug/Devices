@@ -173,6 +173,7 @@ void loop() {
     Serial << "Temp"
            << "\t" << sensors.getTempCByIndex(0) << endl;
   }
+  test
 }
 
 void click() {

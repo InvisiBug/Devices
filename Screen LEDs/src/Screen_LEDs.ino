@@ -85,14 +85,8 @@
 #define LEDdata D5
 #define ambientPin D6
 
-// Time
-#define NTP_ADDRESS "uk.pool.ntp.org"  // Uk time server
-#define NTP_OFFSET 60 * 60             // In seconds
-#define NTP_INTERVAL 60 * 1000         // In miliseconds
-
 // MQTT
 #define mqttLen 50
-#define qos 0
 
 #define ON LOW
 #define OFF HIGH
@@ -206,15 +200,15 @@ void loop(void) {
   // rainbow.run();
   // colourFade.run();
 
-  if (mode == 2) rainbow.run();
+  // if (mode == 2) rainbow.run();
 
   handleWiFi();
   handleMQTT();
 
-  unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= interval) {
-    previousMillis = currentMillis;
+  // unsigned long currentMillis = millis();
+  // if (currentMillis - previousMillis >= interval) {
+  //   previousMillis = currentMillis;
 
-    publishAll();
-  }
+  //   // publishAll();
+  // }
 }

@@ -21,15 +21,13 @@ void handleMQTT() {
       if (now - lastMQTTReconnectAttempt > connectionTimeout) {
         lastMQTTReconnectAttempt = now;
 
-        if (mqtt.connect(nodeName, nodeName, 1, 0, disconnectMsg))  // Attempt to connect using a login
-        {
-          Serial << "| MQTT connection established |" << endl;  // Dont publish here, causes crashes
+        if (mqtt.connect(nodeName, nodeName, 1, 0, disconnectMsg)) {  // Attempt to connect using a login
+          Serial << "| MQTT connection established |" << endl;        // Dont publish here, causes crashes
           subscribeToTopics();
           digitalWrite(connectionLED, OFF);
         }
 
-        else  // Not connected
-        {
+        else {  // Not connected
           Serial << "| MQTT connection failed, rc=" << mqtt.state() << " Trying again |" << endl;
 
           digitalWrite(connectionLED, ON);
@@ -37,10 +35,7 @@ void handleMQTT() {
           digitalWrite(connectionLED, OFF);
         }
       }
-    }
-
-    else  // Connected
-    {
+    } else {
       mqtt.loop();
     }
   }
@@ -50,26 +45,29 @@ void messageReceived(char* topic, byte* payload, unsigned int length) {
   // Serial << "Message" << endl;
   printMessage(payload, length);
 
-  if (length > 1)  // Colours
-  {
-    StaticJsonDocument<256> doc;
-    deserializeJson(doc, payload, length);
+  // if (length > 1)  // Colours
+  // {
+  //   // StaticJsonDocument<256> doc;
+  //   // deserializeJson(doc, payload, length);
 
-    red = doc["red"];
-    green = doc["green"];
-    blue = doc["blue"];
+  //   JsonDocument doc;
+  //   deserializeJson(doc, payload, length);
 
-    Serial << "Red :" << red << " Green :" << green << " Blue: " << blue << endl;
+  //   red = doc["red"];
+  //   green = doc["green"];
+  //   blue = doc["blue"];
 
-    for (int i = 0; i < totalLEDs; i++) {
-      currentLED[i].setRGB(red, green, blue);
-    }
-    FastLED.show();
+  //   Serial << "Red :" << red << " Green :" << green << " Blue: " << blue << endl;
 
-    publishAll();
-  }
+  //   for (int i = 0; i < totalLEDs; i++) {
+  //     currentLED[i].setRGB(red, green, blue);
+  //   }
+  //   FastLED.show();
 
-  else  // Ambient Mode
+  //   publishAll();
+  // }
+
+  // else  // Ambient Mode
   {
     char state = (char)payload[0];
 
@@ -154,20 +152,23 @@ void subscribeToTopics() {
 //
 ////////////////////////////////////////////////////////////////////////
 void publishAll() {
-  const size_t capacity = JSON_OBJECT_SIZE(6);
-  DynamicJsonDocument doc(capacity);
+  // const size_t capacity = JSON_OBJECT_SIZE(6);
+  // DynamicJsonDocument doc(capacity);
 
-  doc["Node"] = nodeName;
-  doc["red"] = red;
-  doc["green"] = green;
-  doc["blue"] = blue;
-  doc["mode"] = mode;
+  // JsonDocument doc;
 
-  char buffer[512];
+  // doc["Node"] = nodeName;
+  // doc["red"] = red;
+  // doc["green"] = green;
+  // doc["blue"] = blue;
+  // doc["mode"] = mode;
 
-  size_t n = serializeJson(doc, buffer);
+  // char buffer[512];
 
-  Serial << buffer << endl;
+  // // size_t n = serializeJson(doc, buffer);
+  // size_t n = serializeJson(doc, buffer);
 
-  mqtt.publish(nodeName, buffer, n);
+  // Serial << buffer << endl;
+
+  mqtt.publish(nodeName, "buffer", 10);
 }
