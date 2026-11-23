@@ -151,14 +151,6 @@ void button4Held() {
 //
 ///////////////////////////////////////////////////////////////////////
 void button5Clicked() {
-  Serial << "Floodlight" << endl;
-  if (floodlightOff) {
-    snprintf(msg, mqttLen, "%c %s", '1', "Floodlight Control");
-    mqtt.publish("Floodlight Control", msg);
-  } else {
-    snprintf(msg, mqttLen, "%c %s", '0', "Floodlight Control");
-    mqtt.publish("Floodlight Control", msg);
-  }
 }
 
 void button5Held() {
@@ -175,13 +167,13 @@ void button5Held() {
 //
 ///////////////////////////////////////////////////////////////////////
 void button6Clicked() {
-  Serial << "Lamp" << endl;
-  if (lampOff) {
-    snprintf(msg, mqttLen, "%c %s", '1', "Study Lamp Control");
-    mqtt.publish("Study Lamp Control", msg);
+  Serial << "Study Lamp" << endl;
+  if (!lampOff) {
+    snprintf(msg, mqttLen, "%s", "{\"state\":\"off\"}");
+    mqtt.publish("zigbee2mqtt/studyLamp/set", msg);
   } else {
-    snprintf(msg, mqttLen, "%c %s", '0', "Study Lamp Control");
-    mqtt.publish("Study Lamp Control", msg);
+    snprintf(msg, mqttLen, "%s", "{\"state\":\"on\"}");
+    mqtt.publish("zigbee2mqtt/studyLamp/set", msg);
   }
 }
 

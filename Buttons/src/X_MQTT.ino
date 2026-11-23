@@ -49,7 +49,7 @@ void handleMQTT() {
 }
 
 void messageReceived(char* topic, byte* payload, unsigned int length) {
-  // printMessage(payload, length);
+  printMessage(topic, payload, length);
 
   if (!strcmp(topic, "Computer Power")) {
     StaticJsonDocument<256> doc;
@@ -88,17 +88,18 @@ void messageReceived(char* topic, byte* payload, unsigned int length) {
     }
   }
 
-  if (!strcmp(topic, "Study Lamp")) {
+  if (!strcmp(topic, "zigbee2mqtt/studyLamp")) {
     StaticJsonDocument<256> doc;
     deserializeJson(doc, payload, length);
 
-    if (doc["state"] == false) {
-      lampOff = true;
-    } else {
+    const char* state = doc["state"] | "";
+    if (!strcmp(state, "ON") || !strcmp(state, "on")) {
       lampOff = false;
+    } else if (!strcmp(state, "OFF") || !strcmp(state, "off")) {
+      lampOff = true;
     }
 
-    // Serial << "Sun: " << !sunOff << endl;
+    // Serial << "Study Lamp: " << !lampOff << endl;
   }
 
   if (!strcmp(topic, "Computer Audio")) {
@@ -170,7 +171,8 @@ void messageReceived(char* topic, byte* payload, unsigned int length) {
   }
 }
 
-void printMessage(byte* payload, int length) {
+void printMessage(char* topic, byte* payload, int length) {
+  Serial << topic;
   for (int i = 0; i < length; i++) {
     Serial << (char)payload[i];  // No endl here
   }
